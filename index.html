@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Direction Navigator | Eastern Wisdom Life OS</title>
+    <meta
+      name="description"
+      content="Discover your life direction through a modern Eastern wisdom-based personality and direction assessment."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="應用">
+      <section class="首頁" id="首頁">
+        <p class="標籤">人生方向導航系統</p>
+        <h1>人生方向導航系統</h1>
+        <p class="介紹">
+          透過 25 題簡易問卷，找出你目前最明顯的生命驅動力組合。
+        </p>
+        <button class="主要按鈕" id="開始按鈕" type="button">
+          開始測驗
+        </button>
+      </section>
+
+      <section class="面板 隱藏" id="問卷頁" aria-live="polite">
+        <div class="進度列區">
+          <p id="題數文字">第 1 題 / 共 25 題</p>
+          <div class="進度底線" aria-hidden="true">
+            <div id="進度填滿"></div>
+          </div>
+        </div>
+
+        <h2 id="題目文字"></h2>
+        <div class="選項區" id="選項列表"></div>
+        <p class="提示文字" id="提示文字"></p>
+        <button class="主要按鈕 下一題按鈕" id="下一題按鈕" type="button">
+          下一題
+        </button>
+      </section>
+
+      <section class="面板 隱藏" id="結果頁">
+        <p class="標籤">測試版簡易報告</p>
+        <h2>你的生命驅動力組合</h2>
+
+        <div class="結果格線">
+          <article class="結果卡片">
+            <p>主驅動力</p>
+            <h3 id="主驅動力"></h3>
+            <span id="主分數"></span>
+          </article>
+
+          <article class="結果卡片">
+            <p>副驅動力</p>
+            <h3 id="副驅動力"></h3>
+            <span id="副分數"></span>
+          </article>
+        </div>
+
+        <div class="摘要盒">
+          <h3>簡易解讀</h3>
+          <p id="結果摘要"></p>
+        </div>
+
+        <div class="洞察格線">
+          <section class="洞察盒">
+            <h3>你的優勢</h3>
+            <ul id="優勢列表"></ul>
+          </section>
+
+          <section class="洞察盒">
+            <h3>你的盲點</h3>
+            <ul id="盲點列表"></ul>
+          </section>
+        </div>
+
+        <div class="分數列表" id="分數列表"></div>
+
+        <div class="評分盒">
+          <h3>這份簡易報告對你有幫助嗎？</h3>
+          <div class="評分按鈕區" id="評分按鈕區"></div>
+          <p class="評分訊息" id="評分訊息"></p>
+        </div>
+
+        <div class="解鎖預告盒">
+          <h3>完整報告將解鎖：</h3>
+          <ul>
+            <li>五大驅動力完整解析</li>
+            <li>你的前三大優勢</li>
+            <li>最容易忽略的人生盲點</li>
+            <li>最適合你的發展方向</li>
+            <li>個人成長建議</li>
+            <li>未來60天行動指南</li>
+          </ul>
+        </div>
+
+        <button class="主要按鈕" id="解鎖按鈕" type="button">
+          Unlock Full Life Direction Report · US$4.99
+        </button>
+        <button class="次要按鈕" id="重新按鈕" type="button">
+          重新測驗
+        </button>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

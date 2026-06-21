@@ -1,0 +1,283 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #2f2a24;
+  background: #f4f0e8;
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+.應用 {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 32px 18px;
+}
+
+.首頁,
+.面板 {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.標籤 {
+  margin: 0 0 12px;
+  color: #7b5f3d;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+p {
+  letter-spacing: 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 1.12;
+}
+
+h2 {
+  margin: 0 0 24px;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.25;
+}
+
+.介紹 {
+  max-width: 640px;
+  margin: 20px 0 32px;
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+button {
+  width: fit-content;
+  min-width: 180px;
+  min-height: 52px;
+  border: 0;
+  border-radius: 8px;
+  padding: 14px 22px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.主要按鈕 {
+  color: #fffdf8;
+  background: #5f6f52;
+}
+
+.次要按鈕 {
+  margin-top: 12px;
+  color: #3d3a35;
+  background: #ded5c5;
+}
+
+.隱藏 {
+  display: none;
+}
+
+.進度列區 {
+  margin-bottom: 28px;
+}
+
+.進度列區 p {
+  margin: 0 0 10px;
+  color: #6c6257;
+  font-weight: 700;
+}
+
+.進度底線 {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ded5c5;
+}
+
+#進度填滿 {
+  width: 4%;
+  height: 100%;
+  background: #5f6f52;
+  transition: width 0.2s ease;
+}
+
+.選項區 {
+  display: grid;
+  gap: 12px;
+}
+
+.選項按鈕 {
+  width: 100%;
+  min-height: 64px;
+  text-align: left;
+  color: #2f2a24;
+  background: #fffaf0;
+  border: 1px solid #d7cbb8;
+}
+
+.選項按鈕:hover,
+.選項按鈕:focus {
+  outline: 3px solid #b7c1a5;
+}
+
+.選項按鈕.已選擇 {
+  color: #fffdf8;
+  background: #5f6f52;
+}
+
+.提示文字 {
+  min-height: 28px;
+  margin: 14px 0 0;
+  color: #9b4d35;
+  font-weight: 700;
+}
+
+.下一題按鈕 {
+  margin-top: 14px;
+}
+
+.結果格線 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.結果卡片,
+.摘要盒,
+.洞察盒,
+.分數項目,
+.評分盒,
+.解鎖預告盒 {
+  border: 1px solid #d7cbb8;
+  border-radius: 8px;
+  background: #fffaf0;
+}
+
+.結果卡片 {
+  padding: 22px;
+}
+
+.結果卡片 p,
+.結果卡片 h3 {
+  margin: 0 0 8px;
+}
+
+.結果卡片 h3 {
+  font-size: 28px;
+}
+
+.摘要盒 {
+  margin: 0 0 18px;
+  padding: 22px;
+}
+
+.摘要盒 h3,
+.摘要盒 p {
+  margin: 0;
+}
+
+.摘要盒 h3 {
+  margin-bottom: 8px;
+}
+
+.摘要盒 p {
+  line-height: 1.8;
+}
+
+.洞察格線 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.洞察盒,
+.解鎖預告盒 {
+  padding: 22px;
+}
+
+.洞察盒 h3,
+.解鎖預告盒 h3 {
+  margin: 0 0 12px;
+}
+
+.洞察盒 ul,
+.解鎖預告盒 ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.7;
+}
+
+.分數列表 {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.分數項目 {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  font-weight: 700;
+}
+
+.評分盒 {
+  margin-bottom: 24px;
+  padding: 22px;
+}
+
+.評分盒 h3 {
+  margin: 0 0 14px;
+}
+
+.評分按鈕區 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.評分按鈕 {
+  min-width: 52px;
+  width: 52px;
+  padding: 12px;
+  color: #2f2a24;
+  background: #ded5c5;
+}
+
+.評分按鈕.已選擇 {
+  color: #fffdf8;
+  background: #5f6f52;
+}
+
+.評分訊息 {
+  min-height: 28px;
+  margin: 12px 0 0;
+  color: #5f6f52;
+  font-weight: 700;
+}
+
+.解鎖預告盒 {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 680px) {
+  .結果格線,
+  .洞察格線 {
+    grid-template-columns: 1fr;
+  }
+
+  button {
+    width: 100%;
+  }
+}
