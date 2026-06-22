@@ -45,7 +45,7 @@ const 選項代號 = {
   戊: "E",
 };
 
-const GA4追蹤代碼 = "G-QVDVWL5M28";
+const GA4追蹤代碼 = "G-JBVZVZ3SZJ";
 
 const 問卷清單 = [
   {
@@ -334,11 +334,6 @@ function 載入GA4() {
   if (GA4追蹤代碼 === "G-XXXXXXXXXX") {
     return;
   }
-
-  const 追蹤腳本 = document.createElement("script");
-  追蹤腳本.async = true;
-  追蹤腳本.src = `https://www.googletagmanager.com/gtag/js?id=${GA4追蹤代碼}`;
-  document.head.appendChild(追蹤腳本);
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () {
