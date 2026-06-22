@@ -45,6 +45,8 @@ const 選項代號 = {
   戊: "E",
 };
 
+const GA4追蹤代碼 = "G-QVDVWL5M28";
+
 const 問卷清單 = [
   {
     題目: "當你有一個完整空閒的週末，你最可能做什麼？",
@@ -328,11 +330,36 @@ const 評分訊息 = document.querySelector("#評分訊息");
 const 解鎖按鈕 = document.querySelector("#解鎖按鈕");
 const 重新按鈕 = document.querySelector("#重新按鈕");
 
+function 載入GA4() {
+  if (GA4追蹤代碼 === "G-XXXXXXXXXX") {
+    return;
+  }
+
+  const 追蹤腳本 = document.createElement("script");
+  追蹤腳本.async = true;
+  追蹤腳本.src = `https://www.googletagmanager.com/gtag/js?id=${GA4追蹤代碼}`;
+  document.head.appendChild(追蹤腳本);
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+
+  window.gtag("js", new Date());
+  window.gtag("config", GA4追蹤代碼, {
+    send_page_view: false,
+  });
+}
+
 function 送出追蹤事件(事件名稱, 事件資料 = {}) {
   if (window.gtag) {
     window.gtag("event", 事件名稱, 事件資料);
   }
 }
+
+載入GA4();
+// page_view：網站開啟時送出，用來統計首頁載入次數。
+送出追蹤事件("page_view");
 
 function 顯示頁面(頁面) {
   首頁.classList.add("隱藏");
@@ -346,7 +373,8 @@ function 開始測驗() {
   分數 = { 甲: 0, 乙: 0, 丙: 0, 丁: 0, 戊: 0 };
   報告已瀏覽 = false;
   評分訊息.textContent = "";
-  送出追蹤事件("ldn_start_clicked");
+  // quiz_start：使用者按下「開始測驗」時送出。
+  送出追蹤事件("quiz_start");
   顯示題目();
   顯示頁面(問卷頁);
 }
@@ -392,7 +420,8 @@ function 前往下一題() {
   目前題號 += 1;
 
   if (目前題號 >= 題目清單.length) {
-    送出追蹤事件("ldn_questionnaire_completed", 分數);
+    // quiz_complete：完成第25題並準備進入結果頁時送出。
+    送出追蹤事件("quiz_complete");
     顯示結果();
     return;
   }
@@ -426,9 +455,11 @@ function 顯示結果() {
 
   建立評分按鈕();
   if (!報告已瀏覽) {
-    送出追蹤事件("ldn_report_viewed", {
-      主要驅動力: 驅動力名稱[主要結果[0]],
-      次要驅動力: 驅動力名稱[次要結果[0]],
+    // result_view：結果頁第一次顯示時送出。
+    送出追蹤事件("result_view");
+    // primary_driver：結果產生時送出主驅動力名稱。
+    送出追蹤事件("primary_driver", {
+      driver_name: 驅動力名稱[主要結果[0]],
     });
     報告已瀏覽 = true;
   }
@@ -466,8 +497,9 @@ function 送出評分(分數值, 選到的按鈕) {
 
   選到的按鈕.classList.add("已選擇");
   評分訊息.textContent = "已收到你的評分，謝謝你。";
-  送出追蹤事件("ldn_rating_submitted", {
-    評分: 分數值,
+  // rating_submit：使用者按滿意度評分時送出評分值。
+  送出追蹤事件("rating_submit", {
+    rating_value: 分數值,
   });
 }
 
