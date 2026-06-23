@@ -393,9 +393,7 @@ function 顯示題目() {
     選項卡片區.appendChild(建立選項卡片(選項));
   });
 
-  const 滑軌盒 = 建立程度滑軌();
   選項列表.appendChild(選項卡片區);
-  選項列表.appendChild(滑軌盒);
 }
 
 function 建立選項卡片(選項) {
@@ -410,19 +408,21 @@ function 建立選項卡片(選項) {
 
 function 選擇選項卡片(卡片) {
   已選類型 = 卡片.dataset.類型;
+  目前滑軌值 = 80;
   提示文字.textContent = "";
 
   document.querySelectorAll(".選項卡片").forEach((選項卡片) => {
     選項卡片.classList.remove("已選擇");
+    選項卡片.querySelector(".滑軌盒")?.remove();
   });
 
   卡片.classList.add("已選擇");
-  document.querySelector(".滑軌盒")?.classList.remove("未啟用");
+  卡片.appendChild(建立程度滑軌());
 }
 
 function 建立程度滑軌() {
   const 滑軌盒 = document.createElement("div");
-  滑軌盒.className = "滑軌盒 未啟用";
+  滑軌盒.className = "滑軌盒";
 
   const 滑軌標籤列 = document.createElement("div");
   滑軌標籤列.className = "滑軌標籤列";
