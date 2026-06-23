@@ -305,7 +305,8 @@ const 題目清單 = 問卷清單.map((題目資料) => 題目資料.題目);
 let 目前題號 = 0;
 let 分數 = { 甲: 0, 乙: 0, 丙: 0, 丁: 0, 戊: 0 };
 let 報告已瀏覽 = false;
-let 目前滑軌值表 = { 甲: 50, 乙: 50, 丙: 50, 丁: 50, 戊: 50 };
+let 已選類型 = "";
+let 目前滑軌值 = 80;
 
 const 首頁 = document.querySelector("#首頁");
 const 問卷頁 = document.querySelector("#問卷頁");
@@ -376,7 +377,8 @@ function 開始測驗() {
 
 function 顯示題目() {
   const 顯示題號 = 目前題號 + 1;
-  目前滑軌值表 = { 甲: 50, 乙: 50, 丙: 50, 丁: 50, 戊: 50 };
+  已選類型 = "";
+  目前滑軌值 = 80;
   題數文字.textContent = `第 ${顯示題號} 題 / 共 ${題目清單.length} 題`;
   題目文字.textContent = 題目清單[目前題號];
   進度填滿.style.width = `${(顯示題號 / 題目清單.length) * 100}%`;
@@ -384,29 +386,54 @@ function 顯示題目() {
   下一題按鈕.textContent = 顯示題號 === 題目清單.length ? "查看結果" : "下一題";
   選項列表.innerHTML = "";
 
+  const 選項卡片區 = document.createElement("div");
+  選項卡片區.className = "選項卡片區";
+
   問卷清單[目前題號].選項.forEach((選項) => {
-    建立選項滑軌(選項);
+    選項卡片區.appendChild(建立選項卡片(選項));
   });
+
+  const 滑軌盒 = 建立程度滑軌();
+  選項列表.appendChild(選項卡片區);
+  選項列表.appendChild(滑軌盒);
 }
 
-function 建立選項滑軌(選項) {
-  const 滑軌盒 = document.createElement("div");
-  滑軌盒.className = "滑軌盒";
+function 建立選項卡片(選項) {
+  const 卡片 = document.createElement("button");
+  卡片.className = "選項卡片";
+  卡片.type = "button";
+  卡片.textContent = `${選項代號[選項.類型]} ${選項.文字}`;
+  卡片.dataset.類型 = 選項.類型;
+  卡片.addEventListener("click", () => 選擇選項卡片(卡片));
+  return 卡片;
+}
 
-  const 選項文字 = document.createElement("p");
-  選項文字.className = "滑軌選項文字";
-  選項文字.textContent = `${選項代號[選項.類型]} ${選項.文字}`;
+function 選擇選項卡片(卡片) {
+  已選類型 = 卡片.dataset.類型;
+  提示文字.textContent = "";
+
+  document.querySelectorAll(".選項卡片").forEach((選項卡片) => {
+    選項卡片.classList.remove("已選擇");
+  });
+
+  卡片.classList.add("已選擇");
+  document.querySelector(".滑軌盒")?.classList.remove("未啟用");
+}
+
+function 建立程度滑軌() {
+  const 滑軌盒 = document.createElement("div");
+  滑軌盒.className = "滑軌盒 未啟用";
 
   const 滑軌標籤列 = document.createElement("div");
   滑軌標籤列.className = "滑軌標籤列";
-  滑軌標籤列.innerHTML = "<span>完全不像我</span><span>一半一半</span><span>非常像我</span>";
+  滑軌標籤列.innerHTML = "<span>有一點像我</span><span>一半一半</span><span>非常像我</span>";
 
   const 滑軌 = document.createElement("input");
   滑軌.className = "程度滑軌";
   滑軌.type = "range";
   滑軌.min = "0";
   滑軌.max = "100";
-  滑軌.value = 目前滑軌值表[選項.類型];
+  滑軌.value = 目前滑軌值;
 
   const 滑軌狀態列 = document.createElement("div");
   滑軌狀態列.className = "滑軌狀態列";
@@ -416,15 +443,13 @@ function 建立選項滑軌(選項) {
 
   滑軌狀態列.appendChild(滑軌數字);
   滑軌狀態列.appendChild(滑軌狀態文字);
-  滑軌盒.appendChild(選項文字);
   滑軌盒.appendChild(滑軌標籤列);
   滑軌盒.appendChild(滑軌);
   滑軌盒.appendChild(滑軌狀態列);
-  選項列表.appendChild(滑軌盒);
 
   function 更新滑軌顯示() {
     const 數值 = Number(滑軌.value);
-    目前滑軌值表[選項.類型] = 數值;
+    目前滑軌值 = 數值;
     滑軌.style.setProperty("--滑軌值", `${數值}%`);
     滑軌.style.setProperty("--目前顏色", 取得滑軌顏色(數值));
     滑軌數字.textContent = `${數值}`;
@@ -433,15 +458,16 @@ function 建立選項滑軌(選項) {
 
   滑軌.addEventListener("input", 更新滑軌顯示);
   更新滑軌顯示();
+  return 滑軌盒;
 }
 
 function 取得滑軌狀態文字(數值) {
   if (數值 <= 20) {
-    return "完全不像我";
+    return "有一點像我";
   }
 
   if (數值 <= 40) {
-    return "有一點像我";
+    return "稍微像我";
   }
 
   if (數值 <= 60) {
@@ -475,31 +501,13 @@ function 取得滑軌顏色(數值) {
   return "#4f7fa8";
 }
 
-function 將滑軌轉為分數(數值) {
-  if (數值 <= 20) {
-    return 1;
-  }
-
-  if (數值 <= 40) {
-    return 2;
-  }
-
-  if (數值 <= 60) {
-    return 3;
-  }
-
-  if (數值 <= 80) {
-    return 4;
-  }
-
-  return 5;
-}
-
 function 前往下一題() {
-  Object.entries(目前滑軌值表).forEach(([類型, 數值]) => {
-    分數[類型] += 將滑軌轉為分數(數值);
-  });
+  if (!已選類型) {
+    提示文字.textContent = "請先選擇最接近你的答案";
+    return;
+  }
 
+  分數[已選類型] += 目前滑軌值;
   目前題號 += 1;
 
   if (目前題號 >= 題目清單.length) {

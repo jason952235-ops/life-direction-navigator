@@ -57,6 +57,18 @@ h2 {
   line-height: 1.8;
 }
 
+.版本標記 {
+  width: fit-content;
+  margin: 0 0 24px;
+  border: 1px solid #d7cbb8;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: #6c6257;
+  background: rgba(255, 250, 240, 0.7);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 button {
   width: fit-content;
   min-width: 180px;
@@ -110,7 +122,79 @@ button {
 
 .選項區 {
   display: grid;
-  gap: 14px;
+  gap: 18px;
+}
+
+.選項卡片區 {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.選項卡片 {
+  width: 100%;
+  min-width: 0;
+  min-height: 104px;
+  padding: 16px;
+  text-align: left;
+  color: #2f2a24;
+  border: 1px solid rgba(215, 203, 184, 0.9);
+  border-radius: 8px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.96),
+      rgba(183, 193, 165, 0.2)
+    );
+  box-shadow: 0 1px 0 rgba(47, 42, 36, 0.04);
+  line-height: 1.5;
+}
+
+.選項卡片:nth-child(2) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.96),
+      rgba(184, 95, 86, 0.12)
+    );
+}
+
+.選項卡片:nth-child(3) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.96),
+      rgba(123, 95, 61, 0.13)
+    );
+}
+
+.選項卡片:nth-child(4) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.96),
+      rgba(138, 111, 159, 0.14)
+    );
+}
+
+.選項卡片:nth-child(5) {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.96),
+      rgba(79, 127, 168, 0.14)
+    );
+}
+
+.選項卡片:hover,
+.選項卡片:focus {
+  outline: 3px solid rgba(183, 193, 165, 0.6);
+}
+
+.選項卡片.已選擇 {
+  border-color: #5f6f52;
+  box-shadow: 0 0 0 4px rgba(95, 111, 82, 0.16);
 }
 
 .滑軌盒 {
@@ -119,15 +203,17 @@ button {
   border: 1px solid #d7cbb8;
   border-radius: 8px;
   padding: 22px;
-  background: #fffaf0;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 250, 240, 0.98),
+      rgba(138, 111, 159, 0.1),
+      rgba(79, 127, 168, 0.1)
+    );
 }
 
-.滑軌選項文字 {
-  margin: 0 0 14px;
-  color: #2f2a24;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.5;
+.滑軌盒.未啟用 {
+  opacity: 0.62;
 }
 
 .滑軌標籤列,
@@ -166,13 +252,7 @@ button {
   height: 18px;
   margin: 8px 0 18px;
   border-radius: 999px;
-  background:
-    linear-gradient(
-      90deg,
-      #b85f56 0%,
-      #8a6f9f 50%,
-      #4f7fa8 100%
-    );
+  background: #ded5c5;
   accent-color: #5f6f52;
   cursor: pointer;
 }
@@ -380,7 +460,12 @@ button {
     padding: 18px;
   }
 
-  .滑軌選項文字 {
+  .選項卡片區 {
+    grid-template-columns: 1fr;
+  }
+
+  .選項卡片 {
+    min-height: 72px;
     font-size: 16px;
   }
 
