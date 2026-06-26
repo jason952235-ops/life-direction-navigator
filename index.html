@@ -3,112 +3,152 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Life Direction Navigator | Eastern Wisdom Life OS</title>
+    <title>Life Direction Navigator｜Beta V1</title>
     <meta
       name="description"
-      content="Discover your life direction through a modern Eastern wisdom-based personality and direction assessment."
+      content="Life Direction Navigator 人生方向導航系統 Beta V1 問卷體驗。"
     />
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-JBVZVZ3SZJ"
-    ></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JBVZVZ3SZJ"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="應用">
-      <section class="首頁" id="首頁">
-        <p class="標籤">人生方向導航系統</p>
-        <h1>人生方向導航系統</h1>
-        <p class="介紹">
-          透過 25 題簡易問卷，找出你目前最明顯的生命驅動力組合。
+    <main class="app-shell">
+      <section class="screen home-screen" id="home-screen">
+        <p class="eyebrow">Beta V1</p>
+        <h1>Life Direction Navigator</h1>
+        <p class="lead">
+          這是一段幫你重新看見生活節奏與內在動力的小探索。它不替你算命，也不替你決定人生，而是陪你整理目前更像自己的方向。
         </p>
-        <p class="版本標記">V2 Slider Beta 733cc46</p>
-        <button class="主要按鈕" id="開始按鈕" type="button">
-          開始測驗
-        </button>
+        <div class="home-panel" aria-label="本次探索重點">
+          <p>你會回答 25 個生活情境題，每題只需要用滑桿表示像不像你。</p>
+          <p>完成後，你會看到目前最明顯的主驅動力，以及下一步可以怎麼開始。</p>
+        </div>
+        <button class="primary-button" id="start-button" type="button">開始探索</button>
       </section>
 
-      <section class="面板 隱藏" id="問卷頁" aria-live="polite">
-        <div class="進度列區">
-          <p id="題數文字">第 1 題 / 共 25 題</p>
-          <div class="進度底線" aria-hidden="true">
-            <div id="進度填滿"></div>
+      <section class="screen quiz-screen hidden" id="quiz-screen" aria-live="polite">
+        <div class="progress-row">
+          <p class="eyebrow" id="question-counter">第 1 題 / 25 題</p>
+          <p class="save-status" id="save-status">已準備</p>
+        </div>
+        <div class="progress-track" aria-hidden="true">
+          <span id="progress-bar"></span>
+        </div>
+
+        <article class="question-card">
+          <p class="question-driver" id="question-driver">生活情境</p>
+          <h2 id="question-text">題目載入中</h2>
+          <div class="slider-area">
+            <input
+              id="answer-slider"
+              type="range"
+              min="0"
+              max="100"
+              step="any"
+              value="50"
+              aria-label="目前感受程度"
+            />
+            <div class="slider-labels">
+              <span id="left-label">有一點像我</span>
+              <strong id="score-label">50%</strong>
+              <span id="right-label">非常像我</span>
+            </div>
           </div>
-        </div>
+        </article>
 
-        <h2 id="題目文字"></h2>
-        <div class="選項區" id="選項列表"></div>
-        <p class="提示文字" id="提示文字"></p>
-        <button class="主要按鈕 下一題按鈕" id="下一題按鈕" type="button">
-          下一題
-        </button>
+        <div class="button-row">
+          <button class="secondary-button" id="prev-button" type="button">上一題</button>
+          <button class="primary-button" id="next-button" type="button">下一題</button>
+        </div>
       </section>
 
-      <section class="面板 隱藏" id="結果頁">
-        <p class="標籤">測試版簡易報告</p>
-        <h2>你的生命驅動力組合</h2>
+      <section class="screen result-screen hidden" id="result-screen">
+        <p class="eyebrow">你的 Beta 結果</p>
+        <h1 id="main-driver-title">主驅動力</h1>
+        <p class="result-summary" id="result-summary">先看見現在最明顯的方向感。</p>
+        <p class="lead" id="result-description">結果整理中。</p>
 
-        <div class="結果格線">
-          <article class="結果卡片">
-            <p>主驅動力</p>
-            <h3 id="主驅動力"></h3>
-            <span id="主分數"></span>
-          </article>
+        <div class="score-list" id="score-list" aria-label="五大驅動力分數"></div>
 
-          <article class="結果卡片">
-            <p>副驅動力</p>
-            <h3 id="副驅動力"></h3>
-            <span id="副分數"></span>
-          </article>
+        <div class="result-note">
+          <h2>下一步建議</h2>
+          <p id="next-step-text">先選一個最小行動，讓生活回饋你，而不是一次逼自己做完所有決定。</p>
         </div>
 
-        <div class="摘要盒">
-          <h3>簡易解讀</h3>
-          <p id="結果摘要"></p>
-        </div>
-
-        <div class="洞察格線">
-          <section class="洞察盒">
-            <h3>你的優勢</h3>
-            <ul id="優勢列表"></ul>
-          </section>
-
-          <section class="洞察盒">
-            <h3>你的盲點</h3>
-            <ul id="盲點列表"></ul>
+        <div class="action-area">
+          <section class="action-block">
+            <h2>你的下一步</h2>
+            <p>這份結果不是要替你決定人生，而是幫你先看見自己的傾向。接下來，你可以先選一個最容易開始的小行動，觀察自己這一週在哪些時刻最有能量。</p>
           </section>
         </div>
 
-        <div class="分數列表" id="分數列表"></div>
+        <button class="primary-button" id="go-feedback-button" type="button">下一步</button>
+      </section>
 
-        <div class="評分盒">
-          <h3>這份簡易報告對你有幫助嗎？</h3>
-          <div class="評分按鈕區" id="評分按鈕區"></div>
-          <p class="評分訊息" id="評分訊息"></p>
+      <section class="screen feedback-screen hidden" id="feedback-screen" aria-labelledby="feedback-title">
+        <p class="eyebrow">Beta 回饋</p>
+        <h1 id="feedback-title">幫助我們確認這份結果是否真的有用</h1>
+
+        <label for="match-score">這個結果像不像你？</label>
+        <input id="match-score" type="range" min="0" max="100" step="any" value="50" />
+        <div class="slider-labels">
+          <span>完全不像</span>
+          <strong id="match-score-label">50%</strong>
+          <span>非常像</span>
         </div>
 
-        <div class="解鎖預告盒">
-          <h3>完整報告將解鎖：</h3>
-          <ul>
-            <li>五大驅動力完整解析</li>
-            <li>你的前三大優勢</li>
-            <li>最容易忽略的人生盲點</li>
-            <li>最適合你的發展方向</li>
-            <li>個人成長建議</li>
-            <li>未來60天行動指南</li>
-          </ul>
-        </div>
+        <fieldset class="feedback-options">
+          <legend>哪一部分最有幫助？</legend>
+          <label><input type="radio" name="helpful-part" value="主驅動力說明" />主驅動力說明</label>
+          <label><input type="radio" name="helpful-part" value="五大驅動力分數" />五大驅動力分數</label>
+          <label><input type="radio" name="helpful-part" value="生活化說明" />生活化說明</label>
+          <label><input type="radio" name="helpful-part" value="下一步建議" />下一步建議</label>
+          <label><input type="radio" name="helpful-part" value="都還好" />都還好</label>
+        </fieldset>
 
-        <button class="主要按鈕" id="解鎖按鈕" type="button">
-          Unlock Full Life Direction Report · US$4.99
-        </button>
-        <button class="次要按鈕" id="重新按鈕" type="button">
-          重新測驗
-        </button>
+        <fieldset class="feedback-options">
+          <legend>哪一部分最需要改善？</legend>
+          <label><input type="radio" name="improve-part" value="文字太多" />文字太多</label>
+          <label><input type="radio" name="improve-part" value="說明不夠清楚" />說明不夠清楚</label>
+          <label><input type="radio" name="improve-part" value="結果不夠像我" />結果不夠像我</label>
+          <label><input type="radio" name="improve-part" value="下一步建議不實用" />下一步建議不實用</label>
+          <label><input type="radio" name="improve-part" value="畫面閱讀不順" />畫面閱讀不順</label>
+          <label><input type="radio" name="improve-part" value="都還好" />都還好</label>
+        </fieldset>
+
+        <fieldset class="feedback-options">
+          <legend>願不願意協助後續 Beta？</legend>
+          <label><input type="radio" name="beta-help" value="願意" />願意</label>
+          <label><input type="radio" name="beta-help" value="先不用" />先不用</label>
+          <label><input type="radio" name="beta-help" value="之後再說" />之後再說</label>
+        </fieldset>
+
+        <section class="feedback-email">
+          <h2>如果願意參與後續 Beta，可以留下 Email</h2>
+          <p>Email 可不填。留下後，我們之後可能邀請你參與新版測試或簡短回饋訪談。</p>
+          <label for="beta-email">Email</label>
+          <input id="beta-email" type="email" placeholder="你的 Email（可不填）" />
+        </section>
+
+        <label for="extra-feedback">其他想補充的話（可不填）</label>
+        <textarea id="extra-feedback" rows="3"></textarea>
+
+        <button class="primary-button" id="save-feedback-button" type="button">儲存回饋</button>
+        <p class="save-status" id="feedback-status">回饋會先儲存在這台裝置。</p>
       </section>
     </main>
 
-    <script src="questions.js"></script>
-    <script src="script.js"></script>
+    <button class="beta-data-toggle" id="beta-data-toggle" type="button">查看 Beta 資料</button>
+
+    <aside class="beta-data-panel hidden" id="beta-data-panel" aria-label="Beta 資料面板">
+      <div class="beta-data-header">
+        <h2>Beta 資料面板</h2>
+        <button class="secondary-button" id="copy-beta-data-button" type="button">複製資料</button>
+      </div>
+      <pre id="beta-data-output">尚未載入資料。</pre>
+      <p class="save-status" id="copy-beta-data-status">這是 Beta 測試階段使用的資料查看工具。</p>
+    </aside>
+
+    <script type="module" src="script.js"></script>
   </body>
 </html>

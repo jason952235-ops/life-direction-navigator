@@ -1,357 +1,364 @@
-const 驅動力名稱 = {
-  甲: "成長驅動力",
-  乙: "影響驅動力",
-  丙: "連結驅動力",
-  丁: "卓越驅動力",
-  戊: "洞察驅動力",
-};
+import { 題庫 } from "./data/questionsBetaV2.js";
+import { 驅動力說明 } from "./data/drivers.js";
+import {
+  依答案計算結果 as 使用計分引擎計算結果,
+  建立中文結果資料 as 使用計分引擎建立中文結果資料,
+} from "./engine/scoreEngine.js";
+import { 載入GA4, 追蹤事件 } from "./utils/ga4.js";
 
-const 驅動力摘要 = {
-  甲: "你目前最在意的是持續學習、突破限制與擴大自己的可能性。",
-  乙: "你目前最在意的是讓自己的行動產生影響，並推動他人或環境前進。",
-  丙: "你目前最在意的是關係、歸屬感與和重要的人一起走得更穩。",
-  丁: "你目前最在意的是品質、成果與把事情做到更成熟、更可靠。",
-  戊: "你目前最在意的是理解本質、看清方向，並用更深的洞察做選擇。",
-};
+const 問卷版本 = "Beta V2";
+const 版本 = "RE Beta V1";
+const 作答儲存鍵 = "lifeDirectionNavigatorBetaAnswers";
+const 回饋儲存鍵 = "lifeDirectionNavigatorBetaFeedback";
+const 場次儲存鍵 = "lifeDirectionNavigatorBetaSession";
 
-const 驅動力補充資料 = {
-  甲: {
-    優勢: ["學習力強", "適應力高", "勇於突破"],
-    盲點: ["容易追求新鮮感", "容易忽略收斂與完成"],
-  },
-  乙: {
-    優勢: ["表達力強", "帶動力高", "善於激勵他人"],
-    盲點: ["容易太在意外界回饋", "容易急著推動他人"],
-  },
-  丙: {
-    優勢: ["同理心強", "重視信任", "善於支持他人"],
-    盲點: ["容易過度顧慮他人", "容易忽略自己的需求"],
-  },
-  丁: {
-    優勢: ["規劃能力強", "執行力高", "重視細節"],
-    盲點: ["容易要求過高", "容易陷入完美主義"],
-  },
-  戊: {
-    優勢: ["觀察力強", "分析力強", "善於理解本質"],
-    盲點: ["容易想太多", "行動速度較慢"],
-  },
-};
+載入GA4();
+追蹤事件("page_view");
 
-const 選項代號 = {
-  甲: "A",
-  乙: "B",
-  丙: "C",
-  丁: "D",
-  戊: "E",
-};
-
-const GA4追蹤代碼 = "G-JBVZVZ3SZJ";
-
-const 問卷清單 = questionBank.map((題目資料) => ({
-  題目: 題目資料.question,
-  選項: 題目資料.options.map((選項) => ({
-    類型: 選項.type,
-    文字: 選項.text,
-  })),
-}));
-const 題目清單 = 問卷清單.map((題目資料) => 題目資料.題目);
+const 首頁 = document.querySelector("#home-screen");
+const 問卷頁 = document.querySelector("#quiz-screen");
+const 結果頁 = document.querySelector("#result-screen");
+const 回饋頁 = document.querySelector("#feedback-screen");
+const 開始按鈕 = document.querySelector("#start-button");
+const 上一題按鈕 = document.querySelector("#prev-button");
+const 下一題按鈕 = document.querySelector("#next-button");
+const 題號文字 = document.querySelector("#question-counter");
+const 儲存狀態 = document.querySelector("#save-status");
+const 進度條 = document.querySelector("#progress-bar");
+const 題目分類 = document.querySelector("#question-driver");
+const 題目文字 = document.querySelector("#question-text");
+const 滑桿 = document.querySelector("#answer-slider");
+const 左側文字 = document.querySelector("#left-label");
+const 右側文字 = document.querySelector("#right-label");
+const 分數文字 = document.querySelector("#score-label");
+const 主驅動力標題 = document.querySelector("#main-driver-title");
+const 結果摘要 = document.querySelector("#result-summary");
+const 結果說明 = document.querySelector("#result-description");
+const 分數列表 = document.querySelector("#score-list");
+const 下一步文字 = document.querySelector("#next-step-text");
+const 前往回饋按鈕 = document.querySelector("#go-feedback-button");
+const BetaEmail = document.querySelector("#beta-email");
+const 相似度滑桿 = document.querySelector("#match-score");
+const 相似度文字 = document.querySelector("#match-score-label");
+const 補充文字 = document.querySelector("#extra-feedback");
+const 儲存回饋按鈕 = document.querySelector("#save-feedback-button");
+const 回饋狀態 = document.querySelector("#feedback-status");
+const Beta資料按鈕 = document.querySelector("#beta-data-toggle");
+const Beta資料面板 = document.querySelector("#beta-data-panel");
+const Beta資料輸出 = document.querySelector("#beta-data-output");
+const 複製Beta資料按鈕 = document.querySelector("#copy-beta-data-button");
+const 複製Beta資料狀態 = document.querySelector("#copy-beta-data-status");
 
 let 目前題號 = 0;
-let 分數 = { 甲: 0, 乙: 0, 丙: 0, 丁: 0, 戊: 0 };
-let 報告已瀏覽 = false;
-let 已選類型 = "";
-let 目前滑軌值 = 80;
+let 作答資料 = {};
+let 結果頁已追蹤 = false;
 
-const 首頁 = document.querySelector("#首頁");
-const 問卷頁 = document.querySelector("#問卷頁");
-const 結果頁 = document.querySelector("#結果頁");
-const 開始按鈕 = document.querySelector("#開始按鈕");
-const 題數文字 = document.querySelector("#題數文字");
-const 進度填滿 = document.querySelector("#進度填滿");
-const 題目文字 = document.querySelector("#題目文字");
-const 選項列表 = document.querySelector("#選項列表");
-const 提示文字 = document.querySelector("#提示文字");
-const 下一題按鈕 = document.querySelector("#下一題按鈕");
-const 主驅動力 = document.querySelector("#主驅動力");
-const 主分數 = document.querySelector("#主分數");
-const 副驅動力 = document.querySelector("#副驅動力");
-const 副分數 = document.querySelector("#副分數");
-const 結果摘要 = document.querySelector("#結果摘要");
-const 優勢列表 = document.querySelector("#優勢列表");
-const 盲點列表 = document.querySelector("#盲點列表");
-const 分數列表 = document.querySelector("#分數列表");
-const 評分按鈕區 = document.querySelector("#評分按鈕區");
-const 評分訊息 = document.querySelector("#評分訊息");
-const 解鎖按鈕 = document.querySelector("#解鎖按鈕");
-const 重新按鈕 = document.querySelector("#重新按鈕");
+function 取得題庫() {
+  return Array.isArray(題庫) ? 題庫 : [];
+}
 
-function 載入GA4() {
-  if (GA4追蹤代碼 === "G-XXXXXXXXXX") {
+function 顯示頁面(目標頁面) {
+  [首頁, 問卷頁, 結果頁, 回饋頁].forEach((頁面) => 頁面.classList.add("hidden"));
+  目標頁面.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function 取得目前答案(題目) {
+  return 作答資料[題目.id]?.sliderValue ?? 50;
+}
+
+function 取得百分比(滑桿元素) {
+  return Math.round(Number(滑桿元素.value));
+}
+
+function 取得單選答案(名稱) {
+  return document.querySelector(`input[name="${名稱}"]:checked`)?.value || "";
+}
+
+function 補零(數字) {
+  return String(數字).padStart(2, "0");
+}
+
+function 取得台灣時間(日期 = new Date()) {
+  const 台灣日期 = new Date(日期.toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
+  const 年 = 台灣日期.getFullYear();
+  const 月 = 補零(台灣日期.getMonth() + 1);
+  const 日 = 補零(台灣日期.getDate());
+  const 時 = 補零(台灣日期.getHours());
+  const 分 = 補零(台灣日期.getMinutes());
+  const 秒 = 補零(台灣日期.getSeconds());
+
+  return `${年}-${月}-${日} ${時}:${分}:${秒}`;
+}
+
+function 建立SessionId() {
+  const 現在 = new Date();
+  const 時間碼 = 取得台灣時間(現在).replaceAll("-", "").replace(" ", "-").replaceAll(":", "");
+  const 隨機碼 = Math.random().toString(36).slice(2, 6).toUpperCase();
+
+  return `LDN-BETA-${時間碼}-${隨機碼}`;
+}
+
+function 建立新場次() {
+  const 場次資料 = {
+    sessionId: 建立SessionId(),
+    startedAt: new Date().toISOString(),
+    startedAtTaiwan: 取得台灣時間(),
+  };
+
+  localStorage.setItem(場次儲存鍵, JSON.stringify(場次資料));
+  return 場次資料;
+}
+
+function 讀取本機資料(儲存鍵) {
+  const 原始資料 = localStorage.getItem(儲存鍵);
+
+  if (!原始資料) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(原始資料);
+  } catch {
+    return 原始資料;
+  }
+}
+
+function 取得場次資料() {
+  return 讀取本機資料(場次儲存鍵) || null;
+}
+
+function 儲存單題答案() {
+  const 題目 = 取得題庫()[目前題號];
+
+  if (!題目) {
     return;
   }
 
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () {
-    window.dataLayer.push(arguments);
+  作答資料[題目.id] = {
+    questionId: 題目.id,
+    sliderValue: 取得百分比(滑桿),
+    percentageValue: 取得百分比(滑桿),
+    questionnaireVersion: 問卷版本,
+    reVersion: 版本,
+    answeredAt: new Date().toISOString(),
   };
 
-  window.gtag("js", new Date());
-  window.gtag("config", GA4追蹤代碼, {
-    send_page_view: false,
-  });
-}
-
-function 送出追蹤事件(事件名稱, 事件資料 = {}) {
-  if (window.gtag) {
-    window.gtag("event", 事件名稱, 事件資料);
-  }
-}
-
-載入GA4();
-// page_view：網站開啟時送出，用來統計首頁載入次數。
-送出追蹤事件("page_view");
-
-function 顯示頁面(頁面) {
-  首頁.classList.add("隱藏");
-  問卷頁.classList.add("隱藏");
-  結果頁.classList.add("隱藏");
-  頁面.classList.remove("隱藏");
-}
-
-function 開始測驗() {
-  目前題號 = 0;
-  分數 = { 甲: 0, 乙: 0, 丙: 0, 丁: 0, 戊: 0 };
-  報告已瀏覽 = false;
-  評分訊息.textContent = "";
-  // quiz_start：使用者按下「開始測驗」時送出。
-  送出追蹤事件("quiz_start");
-  顯示題目();
-  顯示頁面(問卷頁);
+  localStorage.setItem(作答儲存鍵, JSON.stringify(作答資料));
+  儲存狀態.textContent = "已儲存";
 }
 
 function 顯示題目() {
-  const 顯示題號 = 目前題號 + 1;
-  已選類型 = "";
-  目前滑軌值 = 80;
-  題數文字.textContent = `第 ${顯示題號} 題 / 共 ${題目清單.length} 題`;
-  題目文字.textContent = 題目清單[目前題號];
-  進度填滿.style.width = `${(顯示題號 / 題目清單.length) * 100}%`;
-  提示文字.textContent = "";
-  下一題按鈕.textContent = 顯示題號 === 題目清單.length ? "查看結果" : "下一題";
-  選項列表.innerHTML = "";
+  const 題庫 = 取得題庫();
+  const 題目 = 題庫[目前題號];
 
-  const 選項卡片區 = document.createElement("div");
-  選項卡片區.className = "選項卡片區";
-
-  問卷清單[目前題號].選項.forEach((選項) => {
-    選項卡片區.appendChild(建立選項卡片(選項));
-  });
-
-  選項列表.appendChild(選項卡片區);
-}
-
-function 建立選項卡片(選項) {
-  const 卡片 = document.createElement("button");
-  卡片.className = "選項卡片";
-  卡片.type = "button";
-  卡片.textContent = `${選項代號[選項.類型]} ${選項.文字}`;
-  卡片.dataset.類型 = 選項.類型;
-  卡片.addEventListener("click", () => 選擇選項卡片(卡片));
-  return 卡片;
-}
-
-function 選擇選項卡片(卡片) {
-  已選類型 = 卡片.dataset.類型;
-  目前滑軌值 = 80;
-  提示文字.textContent = "";
-
-  document.querySelectorAll(".選項卡片").forEach((選項卡片) => {
-    選項卡片.classList.remove("已選擇");
-    選項卡片.querySelector(".滑軌盒")?.remove();
-  });
-
-  卡片.classList.add("已選擇");
-  卡片.appendChild(建立程度滑軌());
-}
-
-function 建立程度滑軌() {
-  const 滑軌盒 = document.createElement("div");
-  滑軌盒.className = "滑軌盒";
-
-  const 滑軌標籤列 = document.createElement("div");
-  滑軌標籤列.className = "滑軌標籤列";
-  滑軌標籤列.innerHTML = "<span>有一點像我</span><span>一半一半</span><span>非常像我</span>";
-
-  const 滑軌 = document.createElement("input");
-  滑軌.className = "程度滑軌";
-  滑軌.type = "range";
-  滑軌.min = "0";
-  滑軌.max = "100";
-  滑軌.value = 目前滑軌值;
-
-  const 滑軌狀態列 = document.createElement("div");
-  滑軌狀態列.className = "滑軌狀態列";
-
-  const 滑軌數字 = document.createElement("span");
-  const 滑軌狀態文字 = document.createElement("strong");
-
-  滑軌狀態列.appendChild(滑軌數字);
-  滑軌狀態列.appendChild(滑軌狀態文字);
-  滑軌盒.appendChild(滑軌標籤列);
-  滑軌盒.appendChild(滑軌);
-  滑軌盒.appendChild(滑軌狀態列);
-
-  function 更新滑軌顯示() {
-    const 數值 = Number(滑軌.value);
-    目前滑軌值 = 數值;
-    滑軌.style.setProperty("--滑軌值", `${數值}%`);
-    滑軌.style.setProperty("--目前顏色", 取得滑軌顏色(數值));
-    滑軌數字.textContent = `${數值}`;
-    滑軌狀態文字.textContent = 取得滑軌狀態文字(數值);
-  }
-
-  滑軌.addEventListener("input", 更新滑軌顯示);
-  更新滑軌顯示();
-  return 滑軌盒;
-}
-
-function 取得滑軌狀態文字(數值) {
-  if (數值 <= 20) {
-    return "有一點像我";
-  }
-
-  if (數值 <= 40) {
-    return "稍微像我";
-  }
-
-  if (數值 <= 60) {
-    return "一半一半";
-  }
-
-  if (數值 <= 80) {
-    return "大部分像我";
-  }
-
-  return "非常像我";
-}
-
-function 取得滑軌顏色(數值) {
-  if (數值 <= 20) {
-    return "#b85f56";
-  }
-
-  if (數值 <= 40) {
-    return "#9a667c";
-  }
-
-  if (數值 <= 60) {
-    return "#8a6f9f";
-  }
-
-  if (數值 <= 80) {
-    return "#6379a8";
-  }
-
-  return "#4f7fa8";
-}
-
-function 前往下一題() {
-  if (!已選類型) {
-    提示文字.textContent = "請先選擇最接近你的答案";
+  if (!題目) {
     return;
   }
 
-  分數[已選類型] += 目前滑軌值;
-  目前題號 += 1;
+  題號文字.textContent = `第 ${目前題號 + 1} 題 / ${題庫.length} 題`;
+  題目分類.textContent = 題目.driverName || "生活情境";
+  題目文字.textContent = 題目.question;
+  左側文字.textContent = 題目.leftLabel || "有一點像我";
+  右側文字.textContent = 題目.rightLabel || "非常像我";
+  滑桿.value = 取得目前答案(題目);
+  分數文字.textContent = `${取得百分比(滑桿)}%`;
+  進度條.style.width = `${((目前題號 + 1) / 題庫.length) * 100}%`;
+  上一題按鈕.disabled = 目前題號 === 0;
+  下一題按鈕.textContent = 目前題號 === 題庫.length - 1 ? "查看結果" : "下一題";
+  儲存狀態.textContent = 作答資料[題目.id] ? "已儲存" : "尚未作答";
+}
 
-  if (目前題號 >= 題目清單.length) {
-    // quiz_complete：完成第25題並準備進入結果頁時送出。
-    送出追蹤事件("quiz_complete");
-    顯示結果();
-    return;
-  }
+function 計算結果() {
+  return 依答案計算結果(作答資料);
+}
 
-  顯示題目();
+function 依答案計算結果(答案資料) {
+  return 使用計分引擎計算結果(取得題庫(), 答案資料);
+}
+
+function 建立中文結果資料(結果資料) {
+  return 使用計分引擎建立中文結果資料(結果資料, 驅動力說明);
+}
+
+function 取得最後作答時間(問卷原始作答資料) {
+  const 作答時間列表 = Object.values(問卷原始作答資料)
+    .map((答案) => 答案.answeredAt)
+    .filter(Boolean);
+
+  return 作答時間列表.at(-1) || "";
+}
+
+function 建立Beta資料() {
+  const 問卷原始作答資料 = 讀取本機資料(作答儲存鍵) || {};
+  const 回饋資料 = 讀取本機資料(回饋儲存鍵) || {};
+  const 場次資料 = 取得場次資料();
+  const 已回答題數 = Object.keys(問卷原始作答資料).length;
+  const 是否完成 = 已回答題數 === 取得題庫().length;
+  const 完成時間 = 是否完成 ? 取得最後作答時間(問卷原始作答資料) : "";
+  const 結果資料 = Object.keys(問卷原始作答資料).length
+    ? 依答案計算結果(問卷原始作答資料)
+    : null;
+  const 匯出時間 = new Date();
+
+  return {
+    sessionId: 場次資料?.sessionId || "",
+    questionnaireVersion: 問卷版本,
+    reVersion: 版本,
+    answeredCount: 已回答題數,
+    isCompleted: 是否完成,
+    startedAt: 場次資料?.startedAt || "",
+    startedAtTaiwan: 場次資料?.startedAtTaiwan || "",
+    completedAt: 完成時間,
+    completedAtTaiwan: 完成時間 ? 取得台灣時間(new Date(完成時間)) : "",
+    feedbackSubmittedAt: 回饋資料.submittedAt || "",
+    feedbackSubmittedAtTaiwan: 回饋資料.submittedAt ? 取得台灣時間(new Date(回饋資料.submittedAt)) : "",
+    rawAnswers: 問卷原始作答資料,
+    resultData: 建立中文結果資料(結果資料),
+    feedbackData: 回饋資料,
+    betaEmail: 回饋資料.betaEmail || "",
+    exportedAt: 匯出時間.toISOString(),
+    exportedAtTaiwan: 取得台灣時間(匯出時間),
+  };
+}
+
+function 更新Beta資料面板() {
+  const Beta資料 = 建立Beta資料();
+  Beta資料輸出.textContent = JSON.stringify(Beta資料, null, 2);
 }
 
 function 顯示結果() {
-  const 排序分數 = Object.entries(分數).sort((第一筆, 第二筆) => {
-    return 第二筆[1] - 第一筆[1];
-  });
+  const 結果 = 計算結果();
+  const 主驅動力 = 驅動力說明[結果.主驅動力];
+  const 第二驅動力 = 驅動力說明[結果.第二驅動力];
 
-  const 主要結果 = 排序分數[0];
-  const 次要結果 = 排序分數[1];
-
-  主驅動力.textContent = 驅動力名稱[主要結果[0]];
-  主分數.textContent = `${主要結果[1]} 分`;
-  副驅動力.textContent = 驅動力名稱[次要結果[0]];
-  副分數.textContent = `${次要結果[1]} 分`;
-  結果摘要.textContent = `${驅動力摘要[主要結果[0]]} 同時，${驅動力摘要[次要結果[0]]}`;
-  顯示清單(優勢列表, 驅動力補充資料[主要結果[0]].優勢);
-  顯示清單(盲點列表, 驅動力補充資料[主要結果[0]].盲點);
+  if (結果.是雙驅動) {
+    主驅動力標題.textContent = `你的雙驅動傾向：${主驅動力.名稱} × ${第二驅動力.名稱}`;
+    結果摘要.textContent = "你目前同時受到兩種力量牽引。";
+    結果說明.textContent = "這不代表矛盾，而是代表你在不同情境中，會用兩種方式尋找方向。";
+    下一步文字.textContent = "先觀察最近一週：哪些時刻需要前進，哪些時刻需要停下來理解。從這個差異裡，你會更容易找到下一步。";
+  } else {
+    主驅動力標題.textContent = `你的主要驅動力：${主驅動力.名稱}`;
+    結果摘要.textContent = `你現在最明顯的方向感，來自${主驅動力.名稱}。`;
+    結果說明.textContent = 主驅動力.說明;
+    下一步文字.textContent = 主驅動力.建議;
+  }
 
   分數列表.innerHTML = "";
-  排序分數.forEach(([類型, 得分]) => {
-    const 項目 = document.createElement("div");
-    項目.className = "分數項目";
-    項目.innerHTML = `<span>${驅動力名稱[類型]}</span><span>${得分} 分</span>`;
-    分數列表.appendChild(項目);
+
+  結果.排序後分數.forEach(([代號, 分數]) => {
+    const 列 = document.createElement("div");
+    列.className = "score-row";
+    列.innerHTML = `
+      <span class="score-name">${驅動力說明[代號].名稱}</span>
+      <span class="score-bar" aria-hidden="true"><span style="width: ${分數}%"></span></span>
+      <span class="score-value">${分數}%</span>
+    `;
+    分數列表.appendChild(列);
   });
 
-  建立評分按鈕();
-  if (!報告已瀏覽) {
-    // result_view：結果頁第一次顯示時送出。
-    送出追蹤事件("result_view");
-    // primary_driver：結果產生時送出主驅動力名稱。
-    送出追蹤事件("primary_driver", {
-      driver_name: 驅動力名稱[主要結果[0]],
+  if (!結果頁已追蹤) {
+    追蹤事件("result_view");
+    追蹤事件("primary_driver", {
+      driver_name: 主驅動力.名稱,
     });
-    報告已瀏覽 = true;
+    結果頁已追蹤 = true;
   }
 
   顯示頁面(結果頁);
 }
 
-function 顯示清單(清單, 項目文字清單) {
-  清單.innerHTML = "";
+function 儲存回饋() {
+  const 回饋資料 = {
+    betaEmail: BetaEmail.value.trim(),
+    matchPercentage: 取得百分比(相似度滑桿),
+    helpfulPart: 取得單選答案("helpful-part"),
+    improvePart: 取得單選答案("improve-part"),
+    betaHelp: 取得單選答案("beta-help"),
+    extraFeedback: 補充文字.value.trim(),
+    questionnaireVersion: 問卷版本,
+    reVersion: 版本,
+    submittedAt: new Date().toISOString(),
+  };
 
-  項目文字清單.forEach((項目文字) => {
-    const 項目 = document.createElement("li");
-    項目.textContent = 項目文字;
-    清單.appendChild(項目);
+  localStorage.setItem(回饋儲存鍵, JSON.stringify(回饋資料));
+  追蹤事件("rating_submit", {
+    rating_value: 回饋資料.matchPercentage,
   });
+  追蹤事件("feedback_submit", {
+    match_percentage: 回饋資料.matchPercentage,
+    helpful_part: 回饋資料.helpfulPart,
+    improve_part: 回饋資料.improvePart,
+    beta_help: 回饋資料.betaHelp,
+  });
+  回饋狀態.textContent = "謝謝你，回饋已儲存。";
+  更新Beta資料面板();
 }
 
-function 建立評分按鈕() {
-  評分按鈕區.innerHTML = "";
-
-  for (let 分數值 = 1; 分數值 <= 5; 分數值 += 1) {
-    const 按鈕 = document.createElement("button");
-    按鈕.className = "評分按鈕";
-    按鈕.type = "button";
-    按鈕.textContent = 分數值;
-    按鈕.addEventListener("click", () => 送出評分(分數值, 按鈕));
-    評分按鈕區.appendChild(按鈕);
-  }
-}
-
-function 送出評分(分數值, 選到的按鈕) {
-  document.querySelectorAll(".評分按鈕").forEach((按鈕) => {
-    按鈕.classList.remove("已選擇");
-  });
-
-  選到的按鈕.classList.add("已選擇");
-  評分訊息.textContent = "已收到你的評分，謝謝你。";
-  // rating_submit：使用者按滿意度評分時送出評分值。
-  送出追蹤事件("rating_submit", {
-    rating_value: 分數值,
-  });
-}
-
-開始按鈕.addEventListener("click", 開始測驗);
-下一題按鈕.addEventListener("click", 前往下一題);
-重新按鈕.addEventListener("click", 開始測驗);
-解鎖按鈕.addEventListener("click", () => {
-  送出追蹤事件("ldn_unlock_clicked");
-  alert("完整報告即將開放。\n感謝你參與 Beta 測試。");
+開始按鈕.addEventListener("click", () => {
+  建立新場次();
+  作答資料 = {};
+  目前題號 = 0;
+  結果頁已追蹤 = false;
+  localStorage.removeItem(作答儲存鍵);
+  localStorage.removeItem(回饋儲存鍵);
+  追蹤事件("quiz_start");
+  顯示頁面(問卷頁);
+  顯示題目();
 });
+
+滑桿.addEventListener("input", () => {
+  分數文字.textContent = `${取得百分比(滑桿)}%`;
+  儲存單題答案();
+});
+
+上一題按鈕.addEventListener("click", () => {
+  儲存單題答案();
+  目前題號 -= 1;
+  顯示題目();
+});
+
+下一題按鈕.addEventListener("click", () => {
+  儲存單題答案();
+
+  if (目前題號 === 取得題庫().length - 1) {
+    追蹤事件("quiz_complete");
+    顯示結果();
+    return;
+  }
+
+  目前題號 += 1;
+  顯示題目();
+});
+
+相似度滑桿.addEventListener("input", () => {
+  相似度文字.textContent = `${取得百分比(相似度滑桿)}%`;
+});
+
+前往回饋按鈕.addEventListener("click", () => {
+  顯示頁面(回饋頁);
+});
+
+Beta資料按鈕.addEventListener("click", () => {
+  Beta資料面板.classList.toggle("hidden");
+  更新Beta資料面板();
+});
+
+複製Beta資料按鈕.addEventListener("click", async () => {
+  更新Beta資料面板();
+
+  try {
+    await navigator.clipboard.writeText(Beta資料輸出.textContent);
+  } catch {
+    const 暫存欄位 = document.createElement("textarea");
+    暫存欄位.value = Beta資料輸出.textContent;
+    document.body.appendChild(暫存欄位);
+    暫存欄位.select();
+    document.execCommand("copy");
+    暫存欄位.remove();
+  }
+
+  複製Beta資料狀態.textContent = "已複製，可以貼給產品分析";
+});
+
+儲存回饋按鈕.addEventListener("click", 儲存回饋);

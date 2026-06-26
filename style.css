@@ -2,440 +2,436 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
+  min-height: 100%;
   margin: 0;
-  min-height: 100vh;
-  color: #2f2a24;
-  background: #f4f0e8;
+  color: #2f2a25;
+  background: #eee8df;
   font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
 }
 
-.應用 {
-  width: min(920px, 100%);
-  margin: 0 auto;
-  padding: 32px 18px;
+button,
+input,
+textarea {
+  font: inherit;
 }
 
-.首頁,
-.面板 {
-  min-height: calc(100vh - 64px);
+input[type="email"] {
+  width: 100%;
+  border: 1px solid #d7cbbb;
+  border-radius: 8px;
+  padding: 12px;
+  color: #2f2a25;
+  background: #fffaf0;
+}
+
+.app-shell {
+  width: min(100%, 430px);
+  min-height: 100vh;
+  min-height: 100svh;
+  margin: 0 auto;
+  background: #fbf7ef;
+}
+
+.screen {
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 28px 22px;
+}
+
+.hidden {
+  display: none;
+}
+
+.home-screen {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 18px;
 }
 
-.標籤 {
-  margin: 0 0 12px;
-  color: #7b5f3d;
-  font-size: 16px;
+.home-screen.hidden {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #6f7f68;
+  font-size: 13px;
   font-weight: 700;
 }
 
 h1,
 h2,
-h3,
 p {
   letter-spacing: 0;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(40px, 8vw, 72px);
-  line-height: 1.12;
+  font-size: 32px;
+  line-height: 1.22;
 }
 
 h2 {
-  margin: 0 0 24px;
-  font-size: clamp(28px, 5vw, 44px);
-  line-height: 1.25;
+  margin: 0;
+  font-size: 23px;
+  line-height: 1.35;
 }
 
-.介紹 {
-  max-width: 640px;
-  margin: 20px 0 32px;
-  font-size: 20px;
+p {
+  margin: 0;
+  font-size: 16px;
   line-height: 1.8;
 }
 
-.版本標記 {
-  width: fit-content;
-  margin: 0 0 24px;
-  border: 1px solid #d7cbb8;
+.lead {
+  color: #514941;
+}
+
+.home-panel,
+.question-card,
+.result-note,
+.action-block {
+  border: 1px solid #e1d7c8;
+  border-radius: 8px;
+  background: #fffdf8;
+  box-shadow: 0 18px 44px rgba(70, 58, 45, 0.08);
+}
+
+.home-panel {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 48px;
+  border-radius: 8px;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.primary-button {
+  border: 0;
+  color: #fffaf0;
+  background: #66795f;
+}
+
+.secondary-button {
+  border: 1px solid #cfc2b2;
+  color: #514941;
+  background: #fffdf8;
+}
+
+.progress-row,
+.button-row,
+.slider-labels,
+.score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.progress-row {
+  margin-bottom: 12px;
+}
+
+.save-status,
+.range-value {
+  color: #766b60;
+  font-size: 13px;
+}
+
+.progress-track {
+  height: 8px;
+  overflow: hidden;
   border-radius: 999px;
-  padding: 8px 12px;
-  color: #6c6257;
-  background: rgba(255, 250, 240, 0.7);
+  background: #e5dbcf;
+}
+
+.progress-track span {
+  display: block;
+  width: 4%;
+  height: 100%;
+  border-radius: inherit;
+  background: #66795f;
+  transition: width 0.2s ease;
+}
+
+.quiz-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.quiz-screen.hidden {
+  display: none;
+}
+
+.question-card {
+  display: grid;
+  gap: 24px;
+  padding: 24px 18px;
+}
+
+.question-driver {
+  color: #876f55;
   font-size: 14px;
   font-weight: 700;
 }
 
-button {
-  width: fit-content;
-  min-width: 180px;
-  min-height: 52px;
-  border: 0;
-  border-radius: 8px;
-  padding: 14px 22px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
+.slider-area {
+  display: grid;
+  gap: 14px;
 }
 
-.主要按鈕 {
-  color: #fffdf8;
-  background: #5f6f52;
+input[type="range"] {
+  width: 100%;
+  accent-color: #66795f;
 }
 
-.次要按鈕 {
-  margin-top: 12px;
-  color: #3d3a35;
-  background: #ded5c5;
+.slider-labels {
+  color: #766b60;
+  font-size: 13px;
 }
 
-.隱藏 {
-  display: none;
+.slider-labels strong {
+  min-width: 52px;
+  color: #2f2a25;
+  text-align: center;
 }
 
-.進度列區 {
-  margin-bottom: 28px;
+.button-row button {
+  flex: 1;
 }
 
-.進度列區 p {
-  margin: 0 0 10px;
-  color: #6c6257;
-  font-weight: 700;
-}
-
-.進度底線 {
-  height: 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #ded5c5;
-}
-
-#進度填滿 {
-  width: 4%;
-  height: 100%;
-  background: #5f6f52;
-  transition: width 0.2s ease;
-}
-
-.選項區 {
+.result-screen,
+.feedback-screen {
   display: grid;
   gap: 18px;
 }
 
-.選項卡片區 {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  width: 100%;
+.result-screen.hidden,
+.feedback-screen.hidden {
+  display: none;
 }
 
-.選項卡片 {
-  width: 100%;
-  min-width: 0;
-  min-height: 88px;
-  padding: 16px;
-  text-align: left;
-  color: #2f2a24;
-  border: 1px solid rgba(215, 203, 184, 0.9);
-  border-radius: 8px;
-  background: rgba(255, 250, 240, 0.86);
-  box-shadow: 0 1px 0 rgba(47, 42, 36, 0.04);
-  line-height: 1.5;
-}
-
-.選項卡片:hover,
-.選項卡片:focus {
-  outline: 3px solid rgba(183, 193, 165, 0.6);
-}
-
-.選項卡片.已選擇 {
-  border-color: #5f6f52;
-  background:
-    linear-gradient(
-      35deg,
-      rgba(255, 250, 240, 0.98) 0%,
-      rgba(180, 80, 70, 0.1) 34%,
-      rgba(120, 95, 160, 0.08) 66%,
-      rgba(70, 120, 180, 0.1) 100%
-    );
-  box-shadow:
-    0 0 0 4px rgba(95, 111, 82, 0.12),
-    0 10px 22px rgba(47, 42, 36, 0.08);
-}
-
-.滑軌盒 {
-  width: 100%;
-  max-width: 100%;
-  margin-top: 16px;
-  border-top: 1px solid rgba(215, 203, 184, 0.75);
-  padding-top: 14px;
-}
-
-.滑軌標籤列,
-.滑軌狀態列 {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  color: #6c6257;
-}
-
-.滑軌標籤列 {
-  margin-bottom: 16px;
-  font-size: 14px;
+.result-summary {
+  color: #66795f;
   font-weight: 700;
 }
 
-.滑軌標籤列 span {
-  max-width: 33%;
+.score-list {
+  display: grid;
+  gap: 12px;
 }
 
-.滑軌標籤列 span:nth-child(2) {
-  text-align: center;
-}
-
-.滑軌標籤列 span:last-child {
-  text-align: right;
-}
-
-.程度滑軌 {
-  --滑軌值: 50%;
-  --目前顏色: #7d7a75;
-  -webkit-appearance: none;
-  appearance: none;
-  width: 100%;
-  max-width: 100%;
-  height: 18px;
-  margin: 8px 0 18px;
-  border-radius: 999px;
-  background: rgba(222, 213, 197, 0.88);
-  accent-color: #5f6f52;
-  cursor: pointer;
-}
-
-.程度滑軌::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 28px;
-  height: 28px;
-  border: 3px solid #fffaf0;
-  border-radius: 50%;
-  background: #5f6f52;
-  box-shadow: 0 2px 8px rgba(47, 42, 36, 0.18);
-}
-
-.程度滑軌::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border: 3px solid #fffaf0;
-  border-radius: 50%;
-  background: #5f6f52;
-  box-shadow: 0 2px 8px rgba(47, 42, 36, 0.18);
-}
-
-.滑軌狀態列 {
+.score-row {
+  display: grid;
+  grid-template-columns: 82px 1fr auto;
   align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fffdf8;
+}
+
+.score-name {
+  font-weight: 700;
+}
+
+.score-value {
+  color: #7a7065;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.score-bar {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ebe2d8;
+}
+
+.score-bar span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: #8a9b7d;
+}
+
+.result-note,
+.action-area,
+.action-block,
+.feedback-screen {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.action-area {
+  padding: 0;
+}
+
+.action-block label,
+.feedback-email label {
+  font-weight: 700;
+}
+
+.feedback-email {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #e1d7c8;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fffdf8;
+}
+
+.feedback-screen label {
+  font-weight: 700;
+}
+
+.feedback-options {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.feedback-options legend {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.feedback-options label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  border: 1px solid #e1d7c8;
+  border-radius: 8px;
+  padding: 9px 11px;
+  background: #fffaf0;
+  font-weight: 400;
+}
+
+.feedback-options input {
+  accent-color: #66795f;
+}
+
+.feedback-screen textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #d7cbbb;
+  border-radius: 8px;
+  padding: 10px;
+  color: #2f2a25;
+  background: #fffaf0;
+}
+
+.beta-data-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 10;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 14px;
+  color: #fffaf0;
+  background: #4f5f4b;
+  box-shadow: 0 12px 30px rgba(47, 42, 37, 0.18);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.beta-data-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 62px;
+  z-index: 10;
+  width: min(calc(100% - 28px), 430px);
+  max-height: min(70vh, 620px);
+  display: grid;
+  gap: 12px;
+  overflow: hidden;
+  border: 1px solid #d7cbbb;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fffdf8;
+  box-shadow: 0 18px 48px rgba(47, 42, 37, 0.22);
+  transform: translateX(-50%);
+}
+
+.beta-data-panel.hidden {
+  display: none;
+}
+
+.beta-data-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.beta-data-header h2 {
   font-size: 18px;
 }
 
-.滑軌狀態列 span {
-  min-width: 44px;
-  color: #7b5f3d;
-  font-weight: 700;
+.beta-data-header .secondary-button {
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 13px;
 }
 
-.滑軌狀態列 strong {
-  color: #2f2a24;
-}
-
-.選項按鈕 {
-  width: 100%;
-  min-height: 64px;
-  text-align: left;
-  color: #2f2a24;
-  background: #fffaf0;
-  border: 1px solid #d7cbb8;
-}
-
-.選項按鈕:hover,
-.選項按鈕:focus {
-  outline: 3px solid #b7c1a5;
-}
-
-.選項按鈕.已選擇 {
-  color: #fffdf8;
-  background: #5f6f52;
-}
-
-.提示文字 {
-  min-height: 28px;
-  margin: 14px 0 0;
-  color: #9b4d35;
-  font-weight: 700;
-}
-
-.下一題按鈕 {
-  margin-top: 14px;
-}
-
-.結果格線 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.結果卡片,
-.摘要盒,
-.洞察盒,
-.分數項目,
-.評分盒,
-.解鎖預告盒 {
-  border: 1px solid #d7cbb8;
+.beta-data-panel pre {
+  max-height: 48vh;
+  overflow: auto;
+  margin: 0;
   border-radius: 8px;
-  background: #fffaf0;
-}
-
-.結果卡片 {
-  padding: 22px;
-}
-
-.結果卡片 p,
-.結果卡片 h3 {
-  margin: 0 0 8px;
-}
-
-.結果卡片 h3 {
-  font-size: 28px;
-}
-
-.摘要盒 {
-  margin: 0 0 18px;
-  padding: 22px;
-}
-
-.摘要盒 h3,
-.摘要盒 p {
-  margin: 0;
-}
-
-.摘要盒 h3 {
-  margin-bottom: 8px;
-}
-
-.摘要盒 p {
-  line-height: 1.8;
-}
-
-.洞察格線 {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.洞察盒,
-.解鎖預告盒 {
-  padding: 22px;
-}
-
-.洞察盒 h3,
-.解鎖預告盒 h3 {
-  margin: 0 0 12px;
-}
-
-.洞察盒 ul,
-.解鎖預告盒 ul {
-  display: grid;
-  gap: 10px;
-  margin: 0;
-  padding-left: 22px;
-  line-height: 1.7;
-}
-
-.分數列表 {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.分數項目 {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px 16px;
-  font-weight: 700;
-}
-
-.評分盒 {
-  margin-bottom: 24px;
-  padding: 22px;
-}
-
-.評分盒 h3 {
-  margin: 0 0 14px;
-}
-
-.評分按鈕區 {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.評分按鈕 {
-  min-width: 52px;
-  width: 52px;
   padding: 12px;
-  color: #2f2a24;
-  background: #ded5c5;
+  color: #2f2a25;
+  background: #f7f0e7;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.評分按鈕.已選擇 {
-  color: #fffdf8;
-  background: #5f6f52;
+@media (min-width: 700px) {
+  body {
+    background: #ded5ca;
+  }
+
+  .app-shell {
+    border-left: 1px solid rgba(80, 67, 52, 0.12);
+    border-right: 1px solid rgba(80, 67, 52, 0.12);
+  }
 }
 
-.評分訊息 {
-  min-height: 28px;
-  margin: 12px 0 0;
-  color: #5f6f52;
-  font-weight: 700;
-}
-
-.解鎖預告盒 {
-  margin-bottom: 18px;
-}
-
-@media (max-width: 680px) {
-  .結果格線,
-  .洞察格線 {
-    grid-template-columns: 1fr;
+@media (max-width: 360px) {
+  .screen {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
-  .滑軌盒 {
-    padding: 18px;
+  h1 {
+    font-size: 28px;
   }
 
-  .選項卡片區 {
-    grid-template-columns: 1fr;
-  }
-
-  .選項卡片 {
-    min-height: 72px;
-    font-size: 16px;
-  }
-
-  .滑軌標籤列 {
-    font-size: 13px;
-  }
-
-  .滑軌狀態列 {
-    font-size: 16px;
-  }
-
-  button {
-    width: 100%;
+  h2 {
+    font-size: 21px;
   }
 }
