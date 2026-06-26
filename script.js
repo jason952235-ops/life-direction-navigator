@@ -37,7 +37,6 @@ const 結果說明 = document.querySelector("#result-description");
 const 分數列表 = document.querySelector("#score-list");
 const 下一步文字 = document.querySelector("#next-step-text");
 const 前往回饋按鈕 = document.querySelector("#go-feedback-button");
-const BetaEmail = document.querySelector("#beta-email");
 const 相似度滑桿 = document.querySelector("#match-score");
 const 相似度文字 = document.querySelector("#match-score-label");
 const 補充文字 = document.querySelector("#extra-feedback");
@@ -216,7 +215,6 @@ function 建立Beta資料() {
     rawAnswers: 問卷原始作答資料,
     resultData: 建立中文結果資料(結果資料),
     feedbackData: 回饋資料,
-    betaEmail: 回饋資料.betaEmail || "",
     exportedAt: 匯出時間.toISOString(),
     exportedAtTaiwan: 取得台灣時間(匯出時間),
   };
@@ -270,11 +268,10 @@ function 顯示結果() {
 
 function 儲存回饋() {
   const 回饋資料 = {
-    betaEmail: BetaEmail.value.trim(),
-    matchPercentage: 取得百分比(相似度滑桿),
-    helpfulPart: 取得單選答案("helpful-part"),
-    improvePart: 取得單選答案("improve-part"),
-    betaHelp: 取得單選答案("beta-help"),
+    matchScore: 取得百分比(相似度滑桿),
+    overallFeeling: 取得單選答案("overall-feeling"),
+    fullReportInterest: 取得單選答案("full-report-interest"),
+    willingnessToPay: 取得單選答案("willingness-to-pay"),
     extraFeedback: 補充文字.value.trim(),
     questionnaireVersion: 問卷版本,
     reVersion: 版本,
@@ -283,13 +280,12 @@ function 儲存回饋() {
 
   localStorage.setItem(回饋儲存鍵, JSON.stringify(回饋資料));
   追蹤事件("rating_submit", {
-    rating_value: 回饋資料.matchPercentage,
+    rating_value: 回饋資料.matchScore,
   });
   追蹤事件("feedback_submit", {
-    match_percentage: 回饋資料.matchPercentage,
-    helpful_part: 回饋資料.helpfulPart,
-    improve_part: 回饋資料.improvePart,
-    beta_help: 回饋資料.betaHelp,
+    overall_feeling: 回饋資料.overallFeeling,
+    full_report_interest: 回饋資料.fullReportInterest,
+    willingness_to_pay: 回饋資料.willingnessToPay,
   });
   回饋狀態.textContent = "謝謝你，回饋已儲存。";
   更新Beta資料面板();

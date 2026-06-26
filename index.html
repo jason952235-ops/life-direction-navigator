@@ -92,45 +92,39 @@
         <label for="match-score">這個結果像不像你？</label>
         <input id="match-score" type="range" min="0" max="100" step="any" value="50" />
         <div class="slider-labels">
-          <span>完全不像</span>
+          <span>完全不像我</span>
           <strong id="match-score-label">50%</strong>
-          <span>非常像</span>
+          <span>非常像我</span>
         </div>
 
         <fieldset class="feedback-options">
-          <legend>哪一部分最有幫助？</legend>
-          <label><input type="radio" name="helpful-part" value="主驅動力說明" />主驅動力說明</label>
-          <label><input type="radio" name="helpful-part" value="五大驅動力分數" />五大驅動力分數</label>
-          <label><input type="radio" name="helpful-part" value="生活化說明" />生活化說明</label>
-          <label><input type="radio" name="helpful-part" value="下一步建議" />下一步建議</label>
-          <label><input type="radio" name="helpful-part" value="都還好" />都還好</label>
+          <legend>做完整份測驗後，你最大的感覺是？</legend>
+          <label><input type="radio" name="overall-feeling" value="很了解自己" />很了解自己</label>
+          <label><input type="radio" name="overall-feeling" value="有新的發現" />有新的發現</label>
+          <label><input type="radio" name="overall-feeling" value="普普通通" />普普通通</label>
+          <label><input type="radio" name="overall-feeling" value="有點看不懂" />有點看不懂</label>
+          <label><input type="radio" name="overall-feeling" value="不太像我" />不太像我</label>
         </fieldset>
 
         <fieldset class="feedback-options">
-          <legend>哪一部分最需要改善？</legend>
-          <label><input type="radio" name="improve-part" value="文字太多" />文字太多</label>
-          <label><input type="radio" name="improve-part" value="說明不夠清楚" />說明不夠清楚</label>
-          <label><input type="radio" name="improve-part" value="結果不夠像我" />結果不夠像我</label>
-          <label><input type="radio" name="improve-part" value="下一步建議不實用" />下一步建議不實用</label>
-          <label><input type="radio" name="improve-part" value="畫面閱讀不順" />畫面閱讀不順</label>
-          <label><input type="radio" name="improve-part" value="都還好" />都還好</label>
+          <legend>如果有完整版分析，你最想知道什麼？</legend>
+          <label><input type="radio" name="full-report-interest" value="更了解自己的優勢" />更了解自己的優勢</label>
+          <label><input type="radio" name="full-report-interest" value="更了解適合的工作或方向" />更了解適合的工作或方向</label>
+          <label><input type="radio" name="full-report-interest" value="更了解自己的盲點" />更了解自己的盲點</label>
+          <label><input type="radio" name="full-report-interest" value="更具體的下一步建議" />更具體的下一步建議</label>
+          <label><input type="radio" name="full-report-interest" value="我還不確定" />我還不確定</label>
         </fieldset>
 
         <fieldset class="feedback-options">
-          <legend>願不願意協助後續 Beta？</legend>
-          <label><input type="radio" name="beta-help" value="願意" />願意</label>
-          <label><input type="radio" name="beta-help" value="先不用" />先不用</label>
-          <label><input type="radio" name="beta-help" value="之後再說" />之後再說</label>
+          <legend>如果完整版真的有幫助，你願意付費嗎？</legend>
+          <label><input type="radio" name="willingness-to-pay" value="目前只想免費使用" />目前只想免費使用</label>
+          <label><input type="radio" name="willingness-to-pay" value="願意付 99 元" />願意付 99 元</label>
+          <label><input type="radio" name="willingness-to-pay" value="願意付 199 元" />願意付 199 元</label>
+          <label><input type="radio" name="willingness-to-pay" value="願意付 299 元" />願意付 299 元</label>
+          <label><input type="radio" name="willingness-to-pay" value="願意付 499 元以上" />願意付 499 元以上</label>
         </fieldset>
 
-        <section class="feedback-email">
-          <h2>如果願意參與後續 Beta，可以留下 Email</h2>
-          <p>Email 可不填。留下後，我們之後可能邀請你參與新版測試或簡短回饋訪談。</p>
-          <label for="beta-email">Email</label>
-          <input id="beta-email" type="email" placeholder="你的 Email（可不填）" />
-        </section>
-
-        <label for="extra-feedback">其他想補充的話（可不填）</label>
+        <label for="extra-feedback">有沒有一句話想告訴我們？（選填）</label>
         <textarea id="extra-feedback" rows="3"></textarea>
 
         <button class="primary-button" id="save-feedback-button" type="button">儲存回饋</button>
