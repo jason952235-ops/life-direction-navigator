@@ -68,6 +68,7 @@
               <span id="left-label">非常不像我</span>
               <span id="right-label">非常像我</span>
             </div>
+            <p class="answer-warning" id="answer-warning" role="status" aria-live="polite"></p>
           </div>
         </article>
 
@@ -148,11 +149,32 @@
 
       <section class="screen thank-you-screen hidden" id="thank-you-screen" aria-labelledby="thank-you-title">
         <p class="eyebrow">體驗完成</p>
-        <h1 id="thank-you-title">謝謝你完成這次測試</h1>
+        <h1 id="thank-you-title">謝謝你完成本次測試</h1>
         <div class="thank-you-message">
           <p>你的回饋會幫助我們把 Life Direction Navigator 做得更清楚、更貼近真實使用者。</p>
         </div>
-        <button class="primary-button" id="back-home-button" type="button">回到首頁</button>
+        <section class="full-service-intro" aria-labelledby="full-service-title">
+          <h2 id="full-service-title">完整版 Life Direction Navigator</h2>
+          <p>完整版將提供更完整的分析與可長期保存的方向整理：</p>
+          <ul class="service-list">
+            <li>更完整的人生方向分析</li>
+            <li>五大驅動力深度解讀</li>
+            <li>雙驅動組合解析</li>
+            <li>生活情境分析</li>
+            <li>行動建議</li>
+            <li>可永久保存的 PDF 報告</li>
+          </ul>
+        </section>
+        <button
+          class="primary-button"
+          id="unlock-report-button"
+          type="button"
+          data-future-payment="stripe"
+        >
+          解鎖完整人生導航報告
+        </button>
+        <p class="unlock-status" id="unlock-report-status" role="status" aria-live="polite"></p>
+        <button class="secondary-button" id="back-home-button" type="button">回到首頁</button>
       </section>
     </main>
 

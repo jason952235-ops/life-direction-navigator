@@ -8,6 +8,10 @@ const 版本 = "RE Beta V1";
 const 作答儲存鍵 = "lifeDirectionNavigatorBetaAnswers";
 const 回饋儲存鍵 = "lifeDirectionNavigatorBetaFeedback";
 const 場次儲存鍵 = "lifeDirectionNavigatorBetaSession";
+const 品質檢查設定 = {
+  minimumAnswerTime: 45,
+};
+const 作答提示顯示毫秒 = 3000;
 
 載入GA4();
 追蹤事件("page_view");
@@ -33,6 +37,7 @@ const 滑桿 = document.querySelector("#answer-slider");
 const 左側文字 = document.querySelector("#left-label");
 const 右側文字 = document.querySelector("#right-label");
 const 分數文字 = document.querySelector("#score-label");
+const 作答提示 = document.querySelector("#answer-warning");
 const 主驅動力標題 = document.querySelector("#main-driver-title");
 const 結果摘要 = document.querySelector("#result-summary");
 const 結果說明 = document.querySelector("#result-description");
@@ -44,10 +49,13 @@ const 相似度文字 = document.querySelector("#match-score-label");
 const 補充文字 = document.querySelector("#extra-feedback");
 const 儲存回饋按鈕 = document.querySelector("#save-feedback-button");
 const 回饋狀態 = document.querySelector("#feedback-status");
+const 解鎖報告按鈕 = document.querySelector("#unlock-report-button");
+const 解鎖報告狀態 = document.querySelector("#unlock-report-status");
 
 let 目前題號 = 0;
 let 作答資料 = {};
 let 結果頁已追蹤 = false;
+let 作答提示計時器;
 
 const 生活情境列表 = [
   {
@@ -89,6 +97,17 @@ function 顯示頁面(目標頁面) {
 
 function 取得目前答案(題目) {
   return 作答資料[題目.id]?.sliderValue ?? 0;
+}
+
+function 隱藏作答提示() {
+  window.clearTimeout(作答提示計時器);
+  作答提示.textContent = "";
+}
+
+function 顯示作答提示() {
+  隱藏作答提示();
+  作答提示.textContent = "請先完成本題作答，再繼續下一題。";
+  作答提示計時器 = window.setTimeout(隱藏作答提示, 作答提示顯示毫秒);
 }
 
 function 取得百分比(滑桿元素) {
@@ -134,6 +153,50 @@ function 建立新場次() {
   return 場次資料;
 }
 
+function 讀取場次資料() {
+  try {
+    return JSON.parse(localStorage.getItem(場次儲存鍵)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function 評估作答品質() {
+  const 答案值 = 取得題庫().map((題目) => 作答資料[題目.id]?.sliderValue);
+  const 不同答案數 = new Set(答案值).size;
+  const 場次資料 = 讀取場次資料();
+  const 開始時間 = new Date(場次資料.startedAt).getTime();
+  const 完成秒數 = Number.isFinite(開始時間)
+    ? Math.max(0, Math.round((Date.now() - 開始時間) / 1000))
+    : null;
+  const 品質原因 = [];
+
+  if (不同答案數 === 1) {
+    品質原因.push("25 題答案全部相同");
+  }
+
+  if (不同答案數 >= 2 && 不同答案數 <= 3) {
+    品質原因.push("25 題只使用 2～3 個固定數值");
+  }
+
+  if (完成秒數 !== null && 完成秒數 < 品質檢查設定.minimumAnswerTime) {
+    品質原因.push(`完成時間 ${完成秒數} 秒，低於建議的 ${品質檢查設定.minimumAnswerTime} 秒`);
+  }
+
+  return {
+    qualityFlag: 品質原因.length >= 2 ? "invalid" : 品質原因.length === 1 ? "warning" : "normal",
+    qualityReason: 品質原因.length ? 品質原因 : ["未發現明顯異常"],
+    completionSeconds: 完成秒數,
+    minimumAnswerTime: 品質檢查設定.minimumAnswerTime,
+  };
+}
+
+function 儲存品質標記() {
+  const 場次資料 = 讀取場次資料();
+  Object.assign(場次資料, 評估作答品質());
+  localStorage.setItem(場次儲存鍵, JSON.stringify(場次資料));
+}
+
 function 儲存單題答案() {
   const 題目 = 取得題庫()[目前題號];
 
@@ -177,6 +240,7 @@ function 顯示題目() {
   上一題按鈕.disabled = 目前題號 === 0;
   下一題按鈕.textContent = 目前題號 === 題庫.length - 1 ? "查看結果" : "下一題";
   儲存狀態.textContent = 作答資料[題目.id] ? "已儲存" : "尚未作答";
+  隱藏作答提示();
 }
 
 function 計算結果() {
@@ -266,20 +330,32 @@ function 儲存回饋() {
 });
 
 滑桿.addEventListener("input", () => {
+  隱藏作答提示();
   分數文字.textContent = `${取得百分比(滑桿)}%`;
   儲存單題答案();
 });
 
+滑桿.addEventListener("pointerdown", () => {
+  if (!作答資料[取得題庫()[目前題號].id]) {
+    儲存單題答案();
+  }
+});
+
 上一題按鈕.addEventListener("click", () => {
-  儲存單題答案();
   目前題號 -= 1;
   顯示題目();
 });
 
 下一題按鈕.addEventListener("click", () => {
-  儲存單題答案();
+  const 題目 = 取得題庫()[目前題號];
+
+  if (!作答資料[題目.id]) {
+    顯示作答提示();
+    return;
+  }
 
   if (目前題號 === 取得題庫().length - 1) {
+    儲存品質標記();
     追蹤事件("quiz_complete");
     顯示結果();
     return;
@@ -299,6 +375,10 @@ function 儲存回饋() {
 
 回首頁按鈕.addEventListener("click", () => {
   顯示頁面(首頁);
+});
+
+解鎖報告按鈕.addEventListener("click", () => {
+  解鎖報告狀態.textContent = "完整版本即將推出。";
 });
 
 儲存回饋按鈕.addEventListener("click", 儲存回饋);

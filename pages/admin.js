@@ -11,6 +11,10 @@ const 版本文字 = document.querySelector("#admin-version");
 const 開始時間文字 = document.querySelector("#admin-started-at");
 const 完成時間文字 = document.querySelector("#admin-completed-at");
 const 主驅動力文字 = document.querySelector("#admin-primary-driver");
+const 品質標記文字 = document.querySelector("#admin-quality-flag");
+const 品質原因文字 = document.querySelector("#admin-quality-reason");
+const 完成秒數文字 = document.querySelector("#admin-completion-seconds");
+const 最低建議秒數文字 = document.querySelector("#admin-minimum-answer-time");
 const 分數列表 = document.querySelector("#admin-score-list");
 const 作答列表 = document.querySelector("#admin-answer-list");
 const 回饋列表 = document.querySelector("#admin-feedback-list");
@@ -67,6 +71,10 @@ function 建立後台資料() {
     isCompleted: 是否完成,
     startedAt: 場次資料.startedAt || "",
     completedAt: 是否完成 ? 取得最後作答時間(作答資料) || "" : "",
+    qualityFlag: 場次資料.qualityFlag || "尚未評估",
+    qualityReason: 場次資料.qualityReason || ["尚未評估"],
+    completionSeconds: 場次資料.completionSeconds ?? null,
+    minimumAnswerTime: 場次資料.minimumAnswerTime ?? null,
     resultData: 建立中文結果資料(結果, 驅動力說明),
     rawAnswers: 作答資料,
     feedbackData: 回饋資料,
@@ -149,6 +157,14 @@ function 更新後台() {
   開始時間文字.textContent = 格式化時間(目前完整資料.startedAt);
   完成時間文字.textContent = 格式化時間(目前完整資料.completedAt);
   主驅動力文字.textContent = 目前完整資料.resultData?.主驅動力中文 || "問卷尚未完成";
+  品質標記文字.textContent = 目前完整資料.qualityFlag;
+  品質原因文字.textContent = Array.isArray(目前完整資料.qualityReason)
+    ? 目前完整資料.qualityReason.join("；")
+    : 目前完整資料.qualityReason;
+  完成秒數文字.textContent =
+    目前完整資料.completionSeconds === null ? "尚未評估" : `${目前完整資料.completionSeconds} 秒`;
+  最低建議秒數文字.textContent =
+    目前完整資料.minimumAnswerTime === null ? "尚未評估" : `${目前完整資料.minimumAnswerTime} 秒`;
   顯示分數(目前完整資料.resultData);
   顯示作答資料(目前完整資料.rawAnswers);
   顯示回饋資料(目前完整資料.feedbackData);

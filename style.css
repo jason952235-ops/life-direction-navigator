@@ -286,6 +286,14 @@ input[type="range"] {
   text-align: center;
 }
 
+.answer-warning {
+  min-height: 24px;
+  color: #8a4337;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
 .button-row button {
   flex: 1;
 }
@@ -427,6 +435,45 @@ input[type="range"] {
   background: #fffdf8;
 }
 
+.full-service-intro {
+  display: grid;
+  gap: 12px;
+  border: 1px solid #e1d7c8;
+  border-radius: 8px;
+  padding: 18px;
+  background: #fffdf8;
+}
+
+.service-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.service-list li {
+  position: relative;
+  padding-left: 26px;
+  line-height: 1.6;
+}
+
+.service-list li::before {
+  position: absolute;
+  left: 0;
+  color: #66795f;
+  content: "✓";
+  font-weight: 700;
+}
+
+.unlock-status {
+  min-height: 24px;
+  color: #66795f;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
 .admin-page {
   background: #eee8df;
 }
@@ -489,6 +536,10 @@ input[type="range"] {
 
 .admin-summary div {
   min-width: 0;
+}
+
+.admin-summary .admin-summary-wide {
+  grid-column: 1 / -1;
 }
 
 .admin-summary dt {
