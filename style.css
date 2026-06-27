@@ -110,73 +110,13 @@ p {
 }
 
 .hero-illustration {
-  position: relative;
-  min-height: 150px;
-  overflow: hidden;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
   border: 1px solid rgba(129, 111, 86, 0.18);
   border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(245, 247, 238, 0.82), rgba(255, 250, 240, 0.92)),
-    repeating-linear-gradient(-10deg, rgba(92, 80, 62, 0.045) 0 1px, transparent 1px 8px);
-}
-
-.hero-illustration span {
-  position: absolute;
-  display: block;
-}
-
-.hero-sun {
-  left: 50%;
-  top: 18px;
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: rgba(231, 190, 105, 0.34);
-  transform: translateX(-50%);
-}
-
-.hero-path {
-  bottom: -18px;
-  width: 120px;
-  height: 110px;
-  border-radius: 80% 80% 0 0;
-  border: 1px solid rgba(126, 111, 84, 0.22);
-  background: rgba(214, 199, 169, 0.3);
-}
-
-.hero-path-left {
-  left: 70px;
-  transform: rotate(18deg);
-}
-
-.hero-path-right {
-  right: 70px;
-  transform: rotate(-18deg);
-}
-
-.hero-person {
-  left: calc(50% - 8px);
-  bottom: 40px;
-  width: 16px;
-  height: 42px;
-  border-radius: 999px 999px 8px 8px;
-  background: rgba(88, 101, 92, 0.42);
-}
-
-.hero-tree {
-  bottom: 36px;
-  width: 34px;
-  height: 54px;
-  border-radius: 60% 60% 20% 20%;
-  background: rgba(111, 127, 104, 0.3);
-}
-
-.hero-tree-left {
-  left: 24px;
-}
-
-.hero-tree-right {
-  right: 28px;
 }
 
 .primary-button,
@@ -261,119 +201,24 @@ p {
 }
 
 .context-illustration {
-  position: relative;
-  min-height: 92px;
-  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 3 / 2;
   border: 1px solid rgba(129, 111, 86, 0.2);
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, rgba(255, 253, 248, 0.92), rgba(234, 226, 211, 0.56)),
-    repeating-linear-gradient(12deg, rgba(96, 78, 56, 0.06) 0 1px, transparent 1px 7px);
+  background-position: center;
+  background-size: cover;
 }
 
-.context-illustration span {
-  position: absolute;
-  display: block;
-  border: 1px solid rgba(87, 76, 65, 0.24);
-  background: rgba(255, 250, 240, 0.68);
-  box-shadow: 0 8px 22px rgba(79, 69, 58, 0.08);
+.context-work {
+  background-image: url("assets/images/question-work.png");
 }
 
-.scene-window {
-  left: 12px;
-  top: 12px;
-  width: 36px;
-  height: 28px;
-  border-radius: 4px;
-  background: rgba(218, 228, 218, 0.58);
+.context-money {
+  background-image: url("assets/images/question-money.png");
 }
 
-.scene-desk {
-  left: 18px;
-  right: 16px;
-  bottom: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: rgba(198, 174, 138, 0.44);
-}
-
-.scene-laptop {
-  left: 46px;
-  bottom: 36px;
-  width: 38px;
-  height: 22px;
-  border-radius: 4px 4px 2px 2px;
-  background: rgba(118, 130, 128, 0.3);
-  transform: skew(-6deg);
-}
-
-.scene-plant {
-  right: 18px;
-  bottom: 38px;
-  width: 18px;
-  height: 28px;
-  border-radius: 50% 50% 8px 8px;
-  background: rgba(116, 144, 100, 0.35);
-}
-
-.scene-note {
-  right: 36px;
-  top: 18px;
-  width: 22px;
-  height: 28px;
-  border-radius: 3px;
-  background: rgba(245, 223, 165, 0.42);
-  transform: rotate(5deg);
-}
-
-.context-money .scene-window {
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  background: rgba(215, 187, 109, 0.42);
-}
-
-.context-money .scene-laptop {
-  left: 40px;
-  width: 46px;
-  height: 26px;
-  border-radius: 7px;
-  background: rgba(180, 147, 92, 0.32);
-  transform: rotate(-4deg);
-}
-
-.context-money .scene-plant {
-  right: 18px;
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  background: rgba(137, 157, 115, 0.35);
-}
-
-.context-stress .scene-window {
-  width: 44px;
-  height: 22px;
-  border-radius: 999px;
-  background: rgba(202, 214, 224, 0.6);
-}
-
-.context-stress .scene-laptop {
-  left: 46px;
-  bottom: 35px;
-  width: 42px;
-  height: 28px;
-  border-radius: 999px 999px 10px 10px;
-  background: rgba(161, 178, 166, 0.34);
-  transform: none;
-}
-
-.context-stress .scene-note {
-  top: 20px;
-  right: 28px;
-  width: 30px;
-  height: 18px;
-  border-radius: 999px;
-  background: rgba(226, 202, 175, 0.42);
+.context-stress {
+  background-image: url("assets/images/question-stress.png");
 }
 
 .context-kicker {
@@ -658,12 +503,9 @@ input[type="range"] {
     grid-template-columns: 1fr;
   }
 
-  .hero-path-left {
-    left: 44px;
-  }
-
-  .hero-path-right {
-    right: 44px;
+  .context-illustration {
+    width: min(100%, 220px);
+    justify-self: center;
   }
 
   h1 {
