@@ -51,6 +51,14 @@ const 儲存回饋按鈕 = document.querySelector("#save-feedback-button");
 const 回饋狀態 = document.querySelector("#feedback-status");
 const 解鎖報告按鈕 = document.querySelector("#unlock-report-button");
 const 解鎖報告狀態 = document.querySelector("#unlock-report-status");
+const 導覽按鈕列表 = Array.from(document.querySelectorAll("[data-nav-panel]"));
+const 導覽面板列表 = Array.from(document.querySelectorAll(".free-nav-panel"));
+const 導覽列 = document.querySelector(".free-nav");
+const 選單按鈕 = document.querySelector("#free-menu-toggle");
+const 選單下拉面板 = document.querySelector("#free-menu-dropdown");
+const 分享網址欄位 = document.querySelector("#share-url");
+const 複製分享連結按鈕 = document.querySelector("#copy-share-link-button");
+const 分享連結狀態 = document.querySelector("#share-link-status");
 
 let 目前題號 = 0;
 let 作答資料 = {};
@@ -93,6 +101,40 @@ function 顯示頁面(目標頁面) {
   [首頁, 問卷頁, 結果頁, 回饋頁, 感謝頁].forEach((頁面) => 頁面.classList.add("hidden"));
   目標頁面.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function 關閉導覽面板() {
+  導覽按鈕列表.forEach((按鈕) => 按鈕.setAttribute("aria-expanded", "false"));
+  導覽面板列表.forEach((面板) => 面板.classList.add("hidden"));
+}
+
+function 關閉功能選單() {
+  選單按鈕.setAttribute("aria-expanded", "false");
+  選單下拉面板.classList.add("hidden");
+  關閉導覽面板();
+}
+
+function 切換功能選單() {
+  const 是否開啟 = 選單按鈕.getAttribute("aria-expanded") === "true";
+
+  if (是否開啟) {
+    關閉功能選單();
+    return;
+  }
+
+  選單按鈕.setAttribute("aria-expanded", "true");
+  選單下拉面板.classList.remove("hidden");
+}
+
+function 切換導覽面板(按鈕) {
+  const 面板 = document.querySelector(`#${按鈕.dataset.navPanel}`);
+  const 是否開啟 = 按鈕.getAttribute("aria-expanded") === "true";
+  關閉導覽面板();
+
+  if (!是否開啟) {
+    按鈕.setAttribute("aria-expanded", "true");
+    面板.classList.remove("hidden");
+  }
 }
 
 function 取得目前答案(題目) {
@@ -318,6 +360,7 @@ function 儲存回饋() {
 }
 
 開始按鈕.addEventListener("click", () => {
+  關閉功能選單();
   建立新場次();
   作答資料 = {};
   目前題號 = 0;
@@ -379,6 +422,36 @@ function 儲存回饋() {
 
 解鎖報告按鈕.addEventListener("click", () => {
   解鎖報告狀態.textContent = "完整版本即將推出。";
+});
+
+導覽按鈕列表.forEach((按鈕) => {
+  按鈕.addEventListener("click", () => {
+    if (按鈕.dataset.navPanel === "share-panel") {
+      分享網址欄位.value = new URL(".", window.location.href).href;
+      分享連結狀態.textContent = "";
+    }
+
+    切換導覽面板(按鈕);
+  });
+});
+
+選單按鈕.addEventListener("click", 切換功能選單);
+
+document.addEventListener("click", (事件) => {
+  if (!導覽列.contains(事件.target)) {
+    關閉功能選單();
+  }
+});
+
+複製分享連結按鈕.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(分享網址欄位.value);
+  } catch {
+    分享網址欄位.select();
+    document.execCommand("copy");
+  }
+
+  分享連結狀態.textContent = "連結已複製。";
 });
 
 儲存回饋按鈕.addEventListener("click", 儲存回饋);

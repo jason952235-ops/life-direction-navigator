@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Life Direction Navigator｜免費版</title>
+    <title>Life Direction Navigator</title>
     <meta
       name="description"
-      content="Life Direction Navigator 人生方向導航系統免費版問卷體驗。"
+      content="Life Direction Navigator 人生方向導航系統問卷體驗。"
     />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JBVZVZ3SZJ"></script>
     <link rel="stylesheet" href="style.css" />
@@ -14,7 +14,109 @@
   <body>
     <main class="app-shell">
       <section class="screen home-screen" id="home-screen">
-        <p class="eyebrow">免費版</p>
+        <nav class="free-nav" aria-label="功能導覽">
+          <div class="free-menu-bar">
+            <button
+              class="free-menu-toggle"
+              id="free-menu-toggle"
+              type="button"
+              aria-controls="free-menu-dropdown"
+              aria-expanded="false"
+            >
+              <span aria-hidden="true">☰</span>
+              選單
+            </button>
+          </div>
+
+          <div class="free-menu-dropdown hidden" id="free-menu-dropdown">
+            <div class="free-menu-items">
+              <button
+                class="free-menu-item"
+                type="button"
+                data-nav-panel="contexts-panel"
+                aria-controls="contexts-panel"
+                aria-expanded="false"
+              >
+                十大生活情境
+              </button>
+              <button
+                class="free-menu-item"
+                type="button"
+                data-nav-panel="wisdom-panel"
+                aria-controls="wisdom-panel"
+                aria-expanded="false"
+              >
+                東方智慧系列
+              </button>
+              <button
+                class="free-menu-item"
+                type="button"
+                data-nav-panel="share-panel"
+                aria-controls="share-panel"
+                aria-expanded="false"
+              >
+                分享
+              </button>
+              <button
+                class="free-menu-item"
+                type="button"
+                data-nav-panel="about-panel"
+                aria-controls="about-panel"
+                aria-expanded="false"
+              >
+                說明
+              </button>
+            </div>
+
+            <section class="free-nav-panel hidden" id="share-panel" aria-labelledby="share-panel-title">
+              <h2 id="share-panel-title">分享 Life Direction Navigator</h2>
+              <label for="share-url">目前網站網址</label>
+              <div class="share-link-row">
+                <input id="share-url" type="text" readonly />
+                <button class="secondary-button" id="copy-share-link-button" type="button">複製連結</button>
+              </div>
+              <p class="nav-panel-status" id="share-link-status" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="free-nav-panel hidden" id="contexts-panel" aria-labelledby="contexts-panel-title">
+              <h2 id="contexts-panel-title">十大生活情境</h2>
+              <ul class="context-nav-list">
+                <li>工作</li>
+                <li>學習</li>
+                <li>家庭</li>
+                <li>人際</li>
+                <li>金錢</li>
+                <li>健康</li>
+                <li>時間</li>
+                <li>選擇</li>
+                <li>壓力</li>
+                <li>休息</li>
+              </ul>
+              <p>未來 Life Direction Navigator 會圍繞這十大生活情境，逐步提供不同主題的導航測驗。</p>
+            </section>
+
+            <section class="free-nav-panel hidden" id="about-panel" aria-labelledby="about-panel-title">
+              <h2 id="about-panel-title">測驗說明</h2>
+              <p>本測驗透過 25 題生活情境滑軌，協助你初步了解目前的五大驅動力分布。</p>
+              <p>這不是算命，也不是診斷，而是一份自我觀察工具。</p>
+              <p class="answer-reminder">請依第一直覺作答，沒有標準答案。</p>
+            </section>
+
+            <section class="free-nav-panel hidden" id="wisdom-panel" aria-labelledby="wisdom-panel-title">
+              <h2 id="wisdom-panel-title">東方智慧系列</h2>
+              <ul class="wisdom-product-list">
+                <li>Chinese Cultural Identity Generator</li>
+                <li>Life Direction Navigator</li>
+                <li>Five Elements Personality System</li>
+                <li>Sun Tzu Business Strategy System</li>
+                <li>Tao Wisdom System</li>
+                <li>I Ching Decision System</li>
+              </ul>
+              <p>這些工具都屬於 Eastern Wisdom Digital Products Platform，未來會逐步串接成完整的東方智慧數位工具系統。</p>
+            </section>
+          </div>
+        </nav>
+
         <h1>Life Direction Navigator</h1>
         <img
           class="hero-illustration"
@@ -153,25 +255,20 @@
         <div class="thank-you-message">
           <p>你的回饋會幫助我們把 Life Direction Navigator 做得更清楚、更貼近真實使用者。</p>
         </div>
-        <section class="full-service-intro" aria-labelledby="full-service-title">
-          <h2 id="full-service-title">完整版 Life Direction Navigator</h2>
-          <p>完整版將提供更完整的分析與可長期保存的方向整理：</p>
-          <ul class="service-list">
-            <li>更完整的人生方向分析</li>
-            <li>五大驅動力深度解讀</li>
-            <li>雙驅動組合解析</li>
-            <li>生活情境分析</li>
-            <li>行動建議</li>
-            <li>可永久保存的 PDF 報告</li>
-          </ul>
-        </section>
+        <figure class="dv-report-visual">
+          <img
+            src="assets/dv/dv-full-report-v1.png"
+            alt="完整版 Life Direction Navigator 服務內容介紹"
+          />
+        </figure>
         <button
-          class="primary-button"
+          class="primary-button report-cta"
           id="unlock-report-button"
           type="button"
           data-future-payment="stripe"
         >
-          解鎖完整人生導航報告
+          <span class="report-cta-title">解鎖完整人生導航報告</span>
+          <span class="report-cta-price">只要 NT$160</span>
         </button>
         <p class="unlock-status" id="unlock-report-status" role="status" aria-live="polite"></p>
         <button class="secondary-button" id="back-home-button" type="button">回到首頁</button>
