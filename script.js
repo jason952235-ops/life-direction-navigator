@@ -25,6 +25,9 @@ const 下一題按鈕 = document.querySelector("#next-button");
 const 題號文字 = document.querySelector("#question-counter");
 const 儲存狀態 = document.querySelector("#save-status");
 const 進度條 = document.querySelector("#progress-bar");
+const 情境插圖 = document.querySelector("#context-illustration");
+const 情境標題 = document.querySelector("#context-title");
+const 情境說明 = document.querySelector("#context-description");
 const 題目分類 = document.querySelector("#question-driver");
 const 題目文字 = document.querySelector("#question-text");
 const 滑桿 = document.querySelector("#answer-slider");
@@ -52,8 +55,36 @@ let 目前題號 = 0;
 let 作答資料 = {};
 let 結果頁已追蹤 = false;
 
+const 生活情境列表 = [
+  {
+    名稱: "工作中的自己",
+    說明: "請回想自己平常工作的樣子，依照最自然的反應回答即可。",
+    樣式: "context-work",
+    起始題號: 0,
+    結束題號: 7,
+  },
+  {
+    名稱: "面對金錢時的自己",
+    說明: "請回想自己平常面對金錢相關事情時的反應，沒有標準答案。",
+    樣式: "context-money",
+    起始題號: 8,
+    結束題號: 15,
+  },
+  {
+    名稱: "壓力來的時候",
+    說明: "請回想自己平常面對壓力時最自然的反應。",
+    樣式: "context-stress",
+    起始題號: 16,
+    結束題號: 24,
+  },
+];
+
 function 取得題庫() {
   return Array.isArray(題庫) ? 題庫 : [];
+}
+
+function 取得生活情境(題號) {
+  return 生活情境列表.find((情境) => 題號 >= 情境.起始題號 && 題號 <= 情境.結束題號);
 }
 
 function 顯示頁面(目標頁面) {
@@ -150,15 +181,19 @@ function 儲存單題答案() {
 function 顯示題目() {
   const 題庫 = 取得題庫();
   const 題目 = 題庫[目前題號];
+  const 生活情境 = 取得生活情境(目前題號);
 
   if (!題目) {
     return;
   }
 
+  情境標題.textContent = 生活情境.名稱;
+  情境說明.textContent = 生活情境.說明;
+  情境插圖.className = `context-illustration ${生活情境.樣式}`;
   題號文字.textContent = `第 ${目前題號 + 1} 題 / ${題庫.length} 題`;
-  題目分類.textContent = 題目.driverName || "生活情境";
+  題目分類.textContent = `${生活情境.名稱} · ${題目.driverName || "生活情境"}`;
   題目文字.textContent = 題目.question;
-  左側文字.textContent = 題目.leftLabel || "有一點像我";
+  左側文字.textContent = 題目.leftLabel || "非常不像我";
   右側文字.textContent = 題目.rightLabel || "非常像我";
   滑桿.value = 取得目前答案(題目);
   分數文字.textContent = `${取得百分比(滑桿)}%`;

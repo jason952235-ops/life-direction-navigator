@@ -16,6 +16,14 @@
       <section class="screen home-screen" id="home-screen">
         <p class="eyebrow">Beta V1</p>
         <h1>Life Direction Navigator</h1>
+        <div class="hero-illustration" aria-hidden="true">
+          <span class="hero-sun"></span>
+          <span class="hero-path hero-path-left"></span>
+          <span class="hero-path hero-path-right"></span>
+          <span class="hero-person"></span>
+          <span class="hero-tree hero-tree-left"></span>
+          <span class="hero-tree hero-tree-right"></span>
+        </div>
         <p class="lead">
           這是一段幫你重新看見生活節奏與內在動力的小探索。它不替你算命，也不替你決定人生，而是陪你整理目前更像自己的方向。
         </p>
@@ -36,6 +44,20 @@
         </div>
 
         <article class="question-card">
+          <div class="context-card" aria-label="目前生活情境">
+            <div class="context-illustration context-work" id="context-illustration" aria-hidden="true">
+              <span class="scene-window"></span>
+              <span class="scene-desk"></span>
+              <span class="scene-laptop"></span>
+              <span class="scene-plant"></span>
+              <span class="scene-note"></span>
+            </div>
+            <div>
+              <p class="context-kicker">生活情境</p>
+              <h2 id="context-title">工作中的自己</h2>
+              <p id="context-description">請回想自己平常工作的樣子，依照最自然的反應回答即可。</p>
+            </div>
+          </div>
           <p class="question-driver" id="question-driver">生活情境</p>
           <h2 id="question-text">題目載入中</h2>
           <div class="slider-area">
@@ -48,9 +70,11 @@
               value="50"
               aria-label="目前感受程度"
             />
-            <div class="slider-labels">
-              <span id="left-label">有一點像我</span>
+            <div class="slider-meter">
               <strong id="score-label">50%</strong>
+            </div>
+            <div class="slider-labels">
+              <span id="left-label">非常不像我</span>
               <span id="right-label">非常像我</span>
             </div>
           </div>
@@ -92,9 +116,9 @@
         <label for="match-score">這個結果像不像你？</label>
         <input id="match-score" type="range" min="0" max="100" step="any" value="50" />
         <div class="slider-labels">
-          <span>完全不像我</span>
+          <span>這不是我平常的反應</span>
           <strong id="match-score-label">50%</strong>
-          <span>非常像我</span>
+          <span>這就是我平常的反應</span>
         </div>
 
         <fieldset class="feedback-options">
