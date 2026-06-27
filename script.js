@@ -1,9 +1,6 @@
 import { 題庫 } from "./data/questionsBetaV2.js";
 import { 驅動力說明 } from "./data/drivers.js";
-import {
-  依答案計算結果 as 使用計分引擎計算結果,
-  建立中文結果資料 as 使用計分引擎建立中文結果資料,
-} from "./engine/scoreEngine.js";
+import { 依答案計算結果 as 使用計分引擎計算結果 } from "./engine/scoreEngine.js";
 import { 載入GA4, 追蹤事件 } from "./utils/ga4.js";
 
 const 問卷版本 = "Beta V2";
@@ -19,7 +16,9 @@ const 首頁 = document.querySelector("#home-screen");
 const 問卷頁 = document.querySelector("#quiz-screen");
 const 結果頁 = document.querySelector("#result-screen");
 const 回饋頁 = document.querySelector("#feedback-screen");
+const 感謝頁 = document.querySelector("#thank-you-screen");
 const 開始按鈕 = document.querySelector("#start-button");
+const 回首頁按鈕 = document.querySelector("#back-home-button");
 const 上一題按鈕 = document.querySelector("#prev-button");
 const 下一題按鈕 = document.querySelector("#next-button");
 const 題號文字 = document.querySelector("#question-counter");
@@ -45,11 +44,6 @@ const 相似度文字 = document.querySelector("#match-score-label");
 const 補充文字 = document.querySelector("#extra-feedback");
 const 儲存回饋按鈕 = document.querySelector("#save-feedback-button");
 const 回饋狀態 = document.querySelector("#feedback-status");
-const Beta資料按鈕 = document.querySelector("#beta-data-toggle");
-const Beta資料面板 = document.querySelector("#beta-data-panel");
-const Beta資料輸出 = document.querySelector("#beta-data-output");
-const 複製Beta資料按鈕 = document.querySelector("#copy-beta-data-button");
-const 複製Beta資料狀態 = document.querySelector("#copy-beta-data-status");
 
 let 目前題號 = 0;
 let 作答資料 = {};
@@ -88,13 +82,13 @@ function 取得生活情境(題號) {
 }
 
 function 顯示頁面(目標頁面) {
-  [首頁, 問卷頁, 結果頁, 回饋頁].forEach((頁面) => 頁面.classList.add("hidden"));
+  [首頁, 問卷頁, 結果頁, 回饋頁, 感謝頁].forEach((頁面) => 頁面.classList.add("hidden"));
   目標頁面.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function 取得目前答案(題目) {
-  return 作答資料[題目.id]?.sliderValue ?? 50;
+  return 作答資料[題目.id]?.sliderValue ?? 0;
 }
 
 function 取得百分比(滑桿元素) {
@@ -138,24 +132,6 @@ function 建立新場次() {
 
   localStorage.setItem(場次儲存鍵, JSON.stringify(場次資料));
   return 場次資料;
-}
-
-function 讀取本機資料(儲存鍵) {
-  const 原始資料 = localStorage.getItem(儲存鍵);
-
-  if (!原始資料) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(原始資料);
-  } catch {
-    return 原始資料;
-  }
-}
-
-function 取得場次資料() {
-  return 讀取本機資料(場次儲存鍵) || null;
 }
 
 function 儲存單題答案() {
@@ -209,55 +185,6 @@ function 計算結果() {
 
 function 依答案計算結果(答案資料) {
   return 使用計分引擎計算結果(取得題庫(), 答案資料);
-}
-
-function 建立中文結果資料(結果資料) {
-  return 使用計分引擎建立中文結果資料(結果資料, 驅動力說明);
-}
-
-function 取得最後作答時間(問卷原始作答資料) {
-  const 作答時間列表 = Object.values(問卷原始作答資料)
-    .map((答案) => 答案.answeredAt)
-    .filter(Boolean);
-
-  return 作答時間列表.at(-1) || "";
-}
-
-function 建立Beta資料() {
-  const 問卷原始作答資料 = 讀取本機資料(作答儲存鍵) || {};
-  const 回饋資料 = 讀取本機資料(回饋儲存鍵) || {};
-  const 場次資料 = 取得場次資料();
-  const 已回答題數 = Object.keys(問卷原始作答資料).length;
-  const 是否完成 = 已回答題數 === 取得題庫().length;
-  const 完成時間 = 是否完成 ? 取得最後作答時間(問卷原始作答資料) : "";
-  const 結果資料 = Object.keys(問卷原始作答資料).length
-    ? 依答案計算結果(問卷原始作答資料)
-    : null;
-  const 匯出時間 = new Date();
-
-  return {
-    sessionId: 場次資料?.sessionId || "",
-    questionnaireVersion: 問卷版本,
-    reVersion: 版本,
-    answeredCount: 已回答題數,
-    isCompleted: 是否完成,
-    startedAt: 場次資料?.startedAt || "",
-    startedAtTaiwan: 場次資料?.startedAtTaiwan || "",
-    completedAt: 完成時間,
-    completedAtTaiwan: 完成時間 ? 取得台灣時間(new Date(完成時間)) : "",
-    feedbackSubmittedAt: 回饋資料.submittedAt || "",
-    feedbackSubmittedAtTaiwan: 回饋資料.submittedAt ? 取得台灣時間(new Date(回饋資料.submittedAt)) : "",
-    rawAnswers: 問卷原始作答資料,
-    resultData: 建立中文結果資料(結果資料),
-    feedbackData: 回饋資料,
-    exportedAt: 匯出時間.toISOString(),
-    exportedAtTaiwan: 取得台灣時間(匯出時間),
-  };
-}
-
-function 更新Beta資料面板() {
-  const Beta資料 = 建立Beta資料();
-  Beta資料輸出.textContent = JSON.stringify(Beta資料, null, 2);
 }
 
 function 顯示結果() {
@@ -323,7 +250,7 @@ function 儲存回饋() {
     willingness_to_pay: 回饋資料.willingnessToPay,
   });
   回饋狀態.textContent = "謝謝你，回饋已儲存。";
-  更新Beta資料面板();
+  顯示頁面(感謝頁);
 }
 
 開始按鈕.addEventListener("click", () => {
@@ -370,26 +297,8 @@ function 儲存回饋() {
   顯示頁面(回饋頁);
 });
 
-Beta資料按鈕.addEventListener("click", () => {
-  Beta資料面板.classList.toggle("hidden");
-  更新Beta資料面板();
-});
-
-複製Beta資料按鈕.addEventListener("click", async () => {
-  更新Beta資料面板();
-
-  try {
-    await navigator.clipboard.writeText(Beta資料輸出.textContent);
-  } catch {
-    const 暫存欄位 = document.createElement("textarea");
-    暫存欄位.value = Beta資料輸出.textContent;
-    document.body.appendChild(暫存欄位);
-    暫存欄位.select();
-    document.execCommand("copy");
-    暫存欄位.remove();
-  }
-
-  複製Beta資料狀態.textContent = "已複製，可以貼給產品分析";
+回首頁按鈕.addEventListener("click", () => {
+  顯示頁面(首頁);
 });
 
 儲存回饋按鈕.addEventListener("click", 儲存回饋);

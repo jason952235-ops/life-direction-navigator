@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Life Direction Navigator｜Beta V1</title>
+    <title>Life Direction Navigator｜免費版</title>
     <meta
       name="description"
-      content="Life Direction Navigator 人生方向導航系統 Beta V1 問卷體驗。"
+      content="Life Direction Navigator 人生方向導航系統免費版問卷體驗。"
     />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JBVZVZ3SZJ"></script>
     <link rel="stylesheet" href="style.css" />
@@ -14,7 +14,7 @@
   <body>
     <main class="app-shell">
       <section class="screen home-screen" id="home-screen">
-        <p class="eyebrow">Beta V1</p>
+        <p class="eyebrow">免費版</p>
         <h1>Life Direction Navigator</h1>
         <img
           class="hero-illustration"
@@ -58,11 +58,11 @@
               min="0"
               max="100"
               step="any"
-              value="50"
+              value="0"
               aria-label="目前感受程度"
             />
             <div class="slider-meter">
-              <strong id="score-label">50%</strong>
+              <strong id="score-label">0%</strong>
             </div>
             <div class="slider-labels">
               <span id="left-label">非常不像我</span>
@@ -78,7 +78,7 @@
       </section>
 
       <section class="screen result-screen hidden" id="result-screen">
-        <p class="eyebrow">你的 Beta 結果</p>
+        <p class="eyebrow">免費版結果</p>
         <h1 id="main-driver-title">主驅動力</h1>
         <p class="result-summary" id="result-summary">先看見現在最明顯的方向感。</p>
         <p class="lead" id="result-description">結果整理中。</p>
@@ -101,7 +101,7 @@
       </section>
 
       <section class="screen feedback-screen hidden" id="feedback-screen" aria-labelledby="feedback-title">
-        <p class="eyebrow">Beta 回饋</p>
+        <p class="eyebrow">使用回饋</p>
         <h1 id="feedback-title">幫助我們確認這份結果是否真的有用</h1>
 
         <label for="match-score">這個結果像不像你？</label>
@@ -145,18 +145,16 @@
         <button class="primary-button" id="save-feedback-button" type="button">儲存回饋</button>
         <p class="save-status" id="feedback-status">回饋會先儲存在這台裝置。</p>
       </section>
+
+      <section class="screen thank-you-screen hidden" id="thank-you-screen" aria-labelledby="thank-you-title">
+        <p class="eyebrow">體驗完成</p>
+        <h1 id="thank-you-title">謝謝你完成這次測試</h1>
+        <div class="thank-you-message">
+          <p>你的回饋會幫助我們把 Life Direction Navigator 做得更清楚、更貼近真實使用者。</p>
+        </div>
+        <button class="primary-button" id="back-home-button" type="button">回到首頁</button>
+      </section>
     </main>
-
-    <button class="beta-data-toggle" id="beta-data-toggle" type="button">查看 Beta 資料</button>
-
-    <aside class="beta-data-panel hidden" id="beta-data-panel" aria-label="Beta 資料面板">
-      <div class="beta-data-header">
-        <h2>Beta 資料面板</h2>
-        <button class="secondary-button" id="copy-beta-data-button" type="button">複製資料</button>
-      </div>
-      <pre id="beta-data-output">尚未載入資料。</pre>
-      <p class="save-status" id="copy-beta-data-status">這是 Beta 測試階段使用的資料查看工具。</p>
-    </aside>
 
     <script type="module" src="script.js"></script>
   </body>

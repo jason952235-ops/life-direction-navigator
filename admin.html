@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Direction Navigator｜Beta 資料後台</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">Beta 內部工具</p>
+          <h1>本機測試資料</h1>
+          <p class="admin-description">此頁只會讀取目前瀏覽器內儲存的 Beta 資料。</p>
+        </div>
+        <a class="secondary-button admin-home-link" href="index.html">回到前台</a>
+      </header>
+
+      <div class="admin-actions">
+        <button class="primary-button" id="admin-copy-button" type="button">複製資料</button>
+        <button class="secondary-button danger-button" id="admin-clear-button" type="button">清除本機測試資料</button>
+      </div>
+      <p class="save-status" id="admin-status">資料已從這台裝置載入。</p>
+
+      <section class="admin-section" aria-labelledby="admin-summary-title">
+        <h2 id="admin-summary-title">測試摘要</h2>
+        <dl class="admin-summary">
+          <div>
+            <dt>問卷版本</dt>
+            <dd id="admin-version">尚無資料</dd>
+          </div>
+          <div>
+            <dt>開始作答時間</dt>
+            <dd id="admin-started-at">尚無資料</dd>
+          </div>
+          <div>
+            <dt>完成作答時間</dt>
+            <dd id="admin-completed-at">尚無資料</dd>
+          </div>
+          <div>
+            <dt>主驅動力</dt>
+            <dd id="admin-primary-driver">尚無資料</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="admin-section" aria-labelledby="admin-scores-title">
+        <h2 id="admin-scores-title">五大驅動力分數</h2>
+        <div class="score-list" id="admin-score-list"></div>
+      </section>
+
+      <section class="admin-section" aria-labelledby="admin-answers-title">
+        <h2 id="admin-answers-title">25 題作答資料</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th scope="col">題號</th>
+                <th scope="col">題目</th>
+                <th scope="col">作答值</th>
+                <th scope="col">作答時間</th>
+              </tr>
+            </thead>
+            <tbody id="admin-answer-list"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-section" aria-labelledby="admin-feedback-title">
+        <h2 id="admin-feedback-title">回饋資料</h2>
+        <dl class="admin-summary" id="admin-feedback-list"></dl>
+      </section>
+
+      <details class="admin-raw-data">
+        <summary>查看完整資料</summary>
+        <pre id="admin-raw-output">尚無資料。</pre>
+      </details>
+    </main>
+
+    <script type="module" src="pages/admin.js"></script>
+  </body>
+</html>
