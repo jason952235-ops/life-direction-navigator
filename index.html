@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Life Direction Navigator</title>
+    <title>人生方向導航系統｜RE001 Beta</title>
     <meta
       name="description"
-      content="Life Direction Navigator 人生方向導航系統問卷體驗。"
+      content="透過 25 題生活情境，整理你目前的五大驅動力與下一步方向。"
     />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JBVZVZ3SZJ"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=re001-beta-v2" />
   </head>
   <body>
     <main class="app-shell">
@@ -117,20 +117,27 @@
           </div>
         </nav>
 
+        <p class="eyebrow home-edition">RE001 · BETA 公開測試</p>
         <h1>Life Direction Navigator</h1>
+        <p class="product-name">人生方向導航系統</p>
         <img
           class="hero-illustration"
           src="assets/images/home-hero.png"
-          alt="Life Direction Navigator 人生方向導航首頁主視覺"
+          alt="一位旅人坐在山徑前，思考接下來的人生方向"
         />
         <p class="lead">
-          這是一段幫你重新看見生活節奏與內在動力的小探索。它不替你算命，也不替你決定人生，而是陪你整理目前更像自己的方向。
+          從工作、金錢與壓力三種真實情境，整理你現在最常出現的反應，重新看見自己的生活節奏與內在動力。
         </p>
         <div class="home-panel" aria-label="本次探索重點">
-          <p>你會回答 25 個生活情境題，每題只需要用滑桿表示像不像你。</p>
-          <p>完成後，你會看到目前最明顯的主驅動力，以及下一步可以怎麼開始。</p>
+          <strong>25 題，約 5 分鐘完成</strong>
+          <p>每題請用滑桿表示這個反應平常出現的頻率；完成後，你會看到目前最明顯的主驅動力與下一步建議。</p>
         </div>
-        <button class="primary-button" id="start-button" type="button">開始探索</button>
+        <ol class="chapter-preview" aria-label="問卷三個章節">
+          <li><span>01</span><strong>工作中的自己</strong></li>
+          <li><span>02</span><strong>面對金錢時的自己</strong></li>
+          <li><span>03</span><strong>壓力來的時候</strong></li>
+        </ol>
+        <button class="primary-button" id="start-button" type="button">開始 Beta 測試</button>
       </section>
 
       <section class="screen quiz-screen hidden" id="quiz-screen" aria-live="polite">
@@ -146,7 +153,7 @@
           <div class="context-card" aria-label="目前生活情境">
             <div class="context-illustration context-work" id="context-illustration" aria-hidden="true"></div>
             <div>
-              <p class="context-kicker">生活情境</p>
+              <p class="context-kicker" id="context-kicker">第一章 · Q01–Q08</p>
               <h2 id="context-title">工作中的自己</h2>
               <p id="context-description">請回想自己平常工作的樣子，依照最自然的反應回答即可。</p>
             </div>
@@ -159,16 +166,19 @@
               type="range"
               min="0"
               max="100"
-              step="any"
+              step="1"
               value="0"
-              aria-label="目前感受程度"
+              aria-label="這個反應出現的頻率"
             />
             <div class="slider-meter">
-              <strong id="score-label">0%</strong>
+              <strong id="score-label">幾乎沒有 · 0%</strong>
             </div>
-            <div class="slider-labels">
-              <span id="left-label">非常不像我</span>
-              <span id="right-label">非常像我</span>
+            <div class="frequency-scale" aria-hidden="true">
+              <span data-frequency-index="0">幾乎沒有</span>
+              <span data-frequency-index="1">偶爾</span>
+              <span data-frequency-index="2">有時候</span>
+              <span data-frequency-index="3">經常</span>
+              <span data-frequency-index="4">幾乎每次</span>
             </div>
             <p class="answer-warning" id="answer-warning" role="status" aria-live="polite"></p>
           </div>
@@ -275,6 +285,6 @@
       </section>
     </main>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="script.js?v=re001-beta-v2"></script>
   </body>
 </html>

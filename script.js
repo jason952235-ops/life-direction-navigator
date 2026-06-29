@@ -1,4 +1,4 @@
-import { 題庫 } from "./data/questionsBetaV2.js";
+import { 題庫, 頻率刻度 } from "./data/questionsBetaV2.js";
 import { 驅動力說明 } from "./data/drivers.js";
 import { 依答案計算結果 as 使用計分引擎計算結果 } from "./engine/scoreEngine.js";
 import { 載入GA4, 追蹤事件 } from "./utils/ga4.js";
@@ -29,14 +29,14 @@ const 題號文字 = document.querySelector("#question-counter");
 const 儲存狀態 = document.querySelector("#save-status");
 const 進度條 = document.querySelector("#progress-bar");
 const 情境插圖 = document.querySelector("#context-illustration");
+const 情境章節 = document.querySelector("#context-kicker");
 const 情境標題 = document.querySelector("#context-title");
 const 情境說明 = document.querySelector("#context-description");
 const 題目分類 = document.querySelector("#question-driver");
 const 題目文字 = document.querySelector("#question-text");
 const 滑桿 = document.querySelector("#answer-slider");
-const 左側文字 = document.querySelector("#left-label");
-const 右側文字 = document.querySelector("#right-label");
 const 分數文字 = document.querySelector("#score-label");
+const 頻率標示列表 = Array.from(document.querySelectorAll("[data-frequency-index]"));
 const 作答提示 = document.querySelector("#answer-warning");
 const 主驅動力標題 = document.querySelector("#main-driver-title");
 const 結果摘要 = document.querySelector("#result-summary");
@@ -67,6 +67,8 @@ let 作答提示計時器;
 
 const 生活情境列表 = [
   {
+    章節: "第一章",
+    題數標示: "Q01–Q08",
     名稱: "工作中的自己",
     說明: "請回想自己平常工作的樣子，依照最自然的反應回答即可。",
     樣式: "context-work",
@@ -74,6 +76,8 @@ const 生活情境列表 = [
     結束題號: 7,
   },
   {
+    章節: "第二章",
+    題數標示: "Q09–Q16",
     名稱: "面對金錢時的自己",
     說明: "請回想自己平常面對金錢相關事情時的反應，沒有標準答案。",
     樣式: "context-money",
@@ -81,6 +85,8 @@ const 生活情境列表 = [
     結束題號: 15,
   },
   {
+    章節: "第三章",
+    題數標示: "Q17–Q25",
     名稱: "壓力來的時候",
     說明: "請回想自己平常面對壓力時最自然的反應。",
     樣式: "context-stress",
@@ -154,6 +160,22 @@ function 顯示作答提示() {
 
 function 取得百分比(滑桿元素) {
   return Math.round(Number(滑桿元素.value));
+}
+
+function 取得頻率資訊(百分比) {
+  const 索引 = Math.min(頻率刻度.length - 1, Math.round(百分比 / 25));
+  return { 索引, 名稱: 頻率刻度[索引] };
+}
+
+function 更新頻率顯示() {
+  const 百分比 = 取得百分比(滑桿);
+  const 頻率 = 取得頻率資訊(百分比);
+
+  分數文字.textContent = `${頻率.名稱} · ${百分比}%`;
+  滑桿.setAttribute("aria-valuetext", `${頻率.名稱}，${百分比}%`);
+  頻率標示列表.forEach((標示, 索引) => {
+    標示.classList.toggle("is-current", 索引 === 頻率.索引);
+  });
 }
 
 function 取得單選答案(名稱) {
@@ -268,16 +290,15 @@ function 顯示題目() {
     return;
   }
 
+  情境章節.textContent = `${生活情境.章節} · ${生活情境.題數標示}`;
   情境標題.textContent = 生活情境.名稱;
   情境說明.textContent = 生活情境.說明;
   情境插圖.className = `context-illustration ${生活情境.樣式}`;
   題號文字.textContent = `第 ${目前題號 + 1} 題 / ${題庫.length} 題`;
-  題目分類.textContent = `${生活情境.名稱} · ${題目.driverName || "生活情境"}`;
+  題目分類.textContent = `${題目.id} · 請依平常發生的頻率作答`;
   題目文字.textContent = 題目.question;
-  左側文字.textContent = 題目.leftLabel || "非常不像我";
-  右側文字.textContent = 題目.rightLabel || "非常像我";
   滑桿.value = 取得目前答案(題目);
-  分數文字.textContent = `${取得百分比(滑桿)}%`;
+  更新頻率顯示();
   進度條.style.width = `${((目前題號 + 1) / 題庫.length) * 100}%`;
   上一題按鈕.disabled = 目前題號 === 0;
   下一題按鈕.textContent = 目前題號 === 題庫.length - 1 ? "查看結果" : "下一題";
@@ -374,7 +395,7 @@ function 儲存回饋() {
 
 滑桿.addEventListener("input", () => {
   隱藏作答提示();
-  分數文字.textContent = `${取得百分比(滑桿)}%`;
+  更新頻率顯示();
   儲存單題答案();
 });
 
